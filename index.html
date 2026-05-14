@@ -1,86 +1,313 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout Usine</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Centre Documentation Technique</title>
 
-    <!-- évite erreur favicon -->
-    <link rel="icon" href="data:,">
+  <link rel="icon" href="data:,">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-        }
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
 
-        header {
-            background: #0b3d91;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
+    body{
+      font-family: Arial, sans-serif;
+      background:#f2f2f2;
+    }
 
-        .logo {
-            width: 220px;
-            max-width: 90%;
-        }
+    header{
+      background:#0b3d91;
+      color:white;
+      text-align:center;
+      padding:25px;
+    }
 
-        .container {
-            height: 70vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .logo{
+      width:220px;
+      max-width:90%;
+      margin-bottom:10px;
+    }
 
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            text-align: center;
-        }
+    h1{
+      margin-top:10px;
+    }
 
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 15px 30px;
-            background: #0b3d91;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 20px;
-        }
+    .container{
+      width:90%;
+      max-width:1200px;
+      margin:40px auto;
+    }
 
-        .btn:hover {
-            background: #06285f;
-        }
-    </style>
+    .menu-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:20px;
+    }
+
+    .card{
+      background:white;
+      border-radius:12px;
+      padding:25px;
+      text-align:center;
+      box-shadow:0 4px 10px rgba(0,0,0,0.15);
+      transition:0.3s;
+    }
+
+    .card:hover{
+      transform:translateY(-5px);
+    }
+
+    .card button{
+      margin-top:15px;
+      padding:12px 25px;
+      border:none;
+      background:#0b3d91;
+      color:white;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:16px;
+    }
+
+    .card button:hover{
+      background:#06285f;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    .back-btn{
+      margin-bottom:25px;
+      padding:10px 20px;
+      border:none;
+      background:#444;
+      color:white;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    .pdf-link{
+      display:block;
+      margin-top:10px;
+      text-decoration:none;
+      color:white;
+      background:#0b3d91;
+      padding:12px;
+      border-radius:8px;
+    }
+
+    .pdf-link:hover{
+      background:#06285f;
+    }
+
+  </style>
 </head>
 
 <body>
 
 <header>
-    <img
-        src="https://tse3.mm.bing.net/th/id/OIP.D3sAoHIsSv62lILMupQYwwHaC0?cb=thfc1&w=517&h=197&rs=1&pid=ImgDetMain&o=7&rm=3"
-        alt="Logo"
-        class="logo"
-    >
 
-    <h1>Layout Usine</h1>
+  <img
+    src="https://tse3.mm.bing.net/th/id/OIP.D3sAoHIsSv62lILMupQYwwHaC0?cb=thfc1&w=517&h=197&rs=1&pid=ImgDetMain&o=7&rm=3"
+    class="logo"
+    alt="logo"
+  >
+
+  <h1>Centre Documentation Technique</h1>
+
 </header>
 
 <div class="container">
-    <div class="card">
-        <h2>PDF Layout Usine</h2>
 
-        <!-- IMPORTANT -->
-        <a href="./usine.pdf" target="_blank" class="btn">
-            Open PDF
-        </a>
+  <!-- HOME PAGE -->
+  <div id="homePage">
+
+    <div class="menu-grid">
+
+      <div class="card">
+        <h2>Usine</h2>
+        <button onclick="showSection('usineSection')">
+          Open
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>UAP1</h2>
+        <button onclick="showSection('uap1Section')">
+          Open
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>UAP2</h2>
+        <button onclick="showSection('uap2Section')">
+          Open
+        </button>
+      </div>
+
+      <div class="card">
+        <h2>Logestique</h2>
+        <button onclick="showSection('logSection')">
+          Open
+        </button>
+      </div>
+
     </div>
+
+  </div>
+
+  <!-- USINE -->
+  <div id="usineSection" class="hidden">
+
+    <button class="back-btn" onclick="goHome()">
+      Back
+    </button>
+
+    <div class="card">
+      <h2>Usine PDF</h2>
+
+      <a href="Usine.pdf" target="_blank" class="pdf-link">
+        Open PDF
+      </a>
+    </div>
+
+  </div>
+
+  <!-- UAP1 -->
+  <div id="uap1Section" class="hidden">
+
+    <button class="back-btn" onclick="goHome()">
+      Back
+    </button>
+
+    <div class="menu-grid">
+
+      <div class="card"><h3>F01</h3><a href="F01.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F02</h3><a href="F02.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F83</h3><a href="F83.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F99</h3><a href="F99.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F85</h3><a href="F85.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F86</h3><a href="F86.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>L76</h3><a href="L76.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>L77</h3><a href="L77.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+    </div>
+
+  </div>
+
+  <!-- UAP2 -->
+  <div id="uap2Section" class="hidden">
+
+    <button class="back-btn" onclick="goHome()">
+      Back
+    </button>
+
+    <div class="menu-grid">
+
+      <div class="card"><h3>L84</h3><a href="L84.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F31</h3><a href="F31.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F87</h3><a href="F87.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F15</h3><a href="F15.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>A12</h3><a href="A12.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>50T</h3><a href="50T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>80T</h3><a href="80T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>120T</h3><a href="120T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>125T</h3><a href="125T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>520T</h3><a href="520T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>550T</h3><a href="550T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>420T</h3><a href="420T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F06</h3><a href="F06.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+      <div class="card"><h3>F24</h3><a href="F24.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
+
+    </div>
+
+  </div>
+
+  <!-- LOGESTIQUE -->
+  <div id="logSection" class="hidden">
+
+    <button class="back-btn" onclick="goHome()">
+      Back
+    </button>
+
+    <div class="menu-grid">
+
+      <div class="card">
+        <h3>Magasin General</h3>
+        <a href="MagasinGeneral.pdf" target="_blank" class="pdf-link">
+          Open PDF
+        </a>
+      </div>
+
+      <div class="card">
+        <h3>Magasin P2</h3>
+        <a href="MagasinP2.pdf" target="_blank" class="pdf-link">
+          Open PDF
+        </a>
+      </div>
+
+      <div class="card">
+        <h3>Magasin P1</h3>
+        <a href="MagasinP1.pdf" target="_blank" class="pdf-link">
+          Open PDF
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+<script>
+
+  function showSection(sectionId){
+
+    document.getElementById('homePage').classList.add('hidden');
+
+    document.getElementById('usineSection').classList.add('hidden');
+    document.getElementById('uap1Section').classList.add('hidden');
+    document.getElementById('uap2Section').classList.add('hidden');
+    document.getElementById('logSection').classList.add('hidden');
+
+    document.getElementById(sectionId).classList.remove('hidden');
+  }
+
+  function goHome(){
+
+    document.getElementById('homePage').classList.remove('hidden');
+
+    document.getElementById('usineSection').classList.add('hidden');
+    document.getElementById('uap1Section').classList.add('hidden');
+    document.getElementById('uap2Section').classList.add('hidden');
+    document.getElementById('logSection').classList.add('hidden');
+  }
+
+</script>
 
 </body>
 </html>
