@@ -283,9 +283,8 @@
         </div>
     </div>
     <div class="footer-note">
-        💡 <strong>Configuration GitHub</strong> : Vos fichiers PDF sont automatiquement chargés depuis ce dépôt.<br>
-        📄 <strong>Usine.pdf</strong> est déjà disponible dans la racine. Pour les autres PDF, créez les fichiers correspondants.<br>
-        🔗 URLs générées automatiquement via raw.githubusercontent.com
+        💡 <strong>Test:</strong> Cliquez sur "USINE" ou sur le bouton "🏭 USINE - Documentation" pour ouvrir Usine.pdf<br>
+        📄 <strong>Usine.pdf</strong> est déjà présent dans le dépôt - il devrait s'ouvrir normalement.
     </div>
 </div>
 
@@ -303,34 +302,38 @@
 
 <script>
     // ==============================================================
-    // CONFIGURATION GITHUB - À ADAPTER SELON VOTRE DÉPÔT
+    // CONFIGURATION GITHUB - CORRIGÉE POUR VOTRE DÉPÔT
     // ==============================================================
-    // Détermination automatique du repository GitHub à partir de l'URL actuelle
-    // Cela fonctionne si index.html est hébergé sur GitHub Pages ou raw
+    
+    // Détection automatique de l'URL de base GitHub
+    // Si la page est ouverte depuis GitHub Pages ou raw, on construit l'URL correcte
     let GITHUB_RAW_BASE = "https://raw.githubusercontent.com/wkwtunisia/wkwtunisia/main/";
     
-    // Alternative : détection automatique si la page est ouverte depuis GitHub
-    // Pour votre cas, avec les fichiers à la racine, on utilise cette base
-    // Vous pouvez aussi modifier manuellement si nécessaire
+    // Fonction pour tester si un fichier existe
+    async function testPdfExists(filename) {
+        try {
+            const response = await fetch(GITHUB_RAW_BASE + filename, { method: 'HEAD' });
+            return response.ok;
+        } catch(e) {
+            return false;
+        }
+    }
     
-    // Fonction pour obtenir l'URL complète du PDF
+    // Fonction pour obtenir l'URL du PDF
     function getPdfUrl(filename) {
-        // Si le fichier est à la racine (comme Usine.pdf)
+        // Pour Usine.pdf qui est à la racine
         return GITHUB_RAW_BASE + filename;
     }
     
     // ========== LISTES DES TITRES ==========
-    // USINE : 1 seul titre "Usine" qui ouvre Usine.pdf
     const usineItems = [
         { label: "🏭 USINE - Documentation", pdfFilename: "Usine.pdf" }
     ];
     
-    // UAP1 : 8 titres
     const uap1Items = [
         "F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"
     ].map(code => ({ label: code, pdfFilename: `UAP1_${code}.pdf` }));
     
-    // UAP2 : 14 titres (avec espaces)
     const uap2Raw = [
         "L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"
     ];
@@ -339,7 +342,6 @@
         return { label: label, pdfFilename: `UAP2_${safeName}.pdf` };
     });
     
-    // LOGISTIQUE : 3 titres
     const logItems = [
         { label: "📦 magasin général", pdfFilename: "Log_magasin_general.pdf" },
         { label: "📦 magasin p2", pdfFilename: "Log_magasin_p2.pdf" },
@@ -354,15 +356,15 @@
         modalTitleElem.innerText = `📄 ${displayLabel}`;
         
         const pdfUrl = getPdfUrl(pdfFilename);
-        console.log(`Chargement du PDF: ${pdfUrl}`);
+        console.log(`📂 Chargement du PDF: ${pdfUrl}`);
         
-        // Afficher un message de chargement
+        // Message de chargement
         iframe.srcdoc = `
             <html>
             <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#f5f5f5;">
                 <div style="text-align:center;">
                     <h3>📄 Chargement du document...</h3>
-                    <p>${pdfFilename}</p>
+                    <p style="color:#666;margin-top:10px;">${pdfFilename}</p>
                     <div style="width:50px;height:50px;border:4px solid #f3f3f3;border-top:4px solid #1e4a6b;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;"></div>
                     <style>@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>
                 </div>
@@ -370,29 +372,41 @@
             </html>
         `;
         
-        // Charger le vrai PDF
+        // Charger le PDF
         iframe.src = pdfUrl;
         
-        // Gestion d'erreur
-        iframe.onerror = () => {
-            iframe.srcdoc = `
-                <html>
-                <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
-                    <div style="text-align:center;max-width:500px;">
-                        <h2>⚠️ Fichier non trouvé</h2>
-                        <p>Le fichier <strong>${pdfFilename}</strong> n'existe pas encore dans le dépôt GitHub.</p>
-                        <p>📌 Pour ajouter ce document:</p>
-                        <ol style="text-align:left;margin-top:15px;">
-                            <li>Téléchargez <strong>${pdfFilename}</strong> dans votre dépôt GitHub</li>
-                            <li>Placez-le au même niveau que index.html</li>
-                            <li>Ou modifiez le chemin dans la configuration</li>
-                        </ol>
-                        <p style="margin-top:20px;">💡 Actuellement <strong>Usine.pdf</strong> est déjà disponible et fonctionne!</p>
-                    </div>
-                </body>
-                </html>
-            `;
-        };
+        // Gestion d'erreur si le PDF ne charge pas
+        setTimeout(() => {
+            try {
+                // Vérification simple
+                if (iframe.contentDocument && iframe.contentDocument.body) {
+                    const bodyText = iframe.contentDocument.body.innerText || "";
+                    if (bodyText.includes("404") || bodyText.includes("Not Found")) {
+                        throw new Error("404");
+                    }
+                }
+            } catch(e) {
+                // Afficher un message d'erreur élégant
+                iframe.srcdoc = `
+                    <html>
+                    <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
+                        <div style="text-align:center;max-width:500px;">
+                            <h2>⚠️ Fichier PDF non trouvé</h2>
+                            <p>Le fichier <strong style="color:#b85c1a;">${pdfFilename}</strong> n'existe pas encore dans le dépôt.</p>
+                            <div style="background:#e8f0fe;border-radius:12px;padding:15px;margin:15px 0;text-align:left;">
+                                <strong>📌 Pour ajouter ce document :</strong><br>
+                                1. Téléchargez <code>${pdfFilename}</code><br>
+                                2. Allez sur GitHub → Add file → Upload files<br>
+                                3. Déposez le fichier et validez
+                            </div>
+                            <p>✅ <strong>Usine.pdf</strong> est déjà disponible et devrait fonctionner !</p>
+                            <button onclick="window.location.reload()" style="margin-top:10px;padding:8px 20px;background:#1e4a6b;color:white;border:none;border-radius:25px;cursor:pointer;">⟳ Réessayer</button>
+                        </div>
+                    </body>
+                    </html>
+                `;
+            }
+        }, 2000);
         
         modal.style.display = 'flex';
         
@@ -486,14 +500,24 @@
         if(usineContent) usineContent.classList.add('open');
     }
     
-    // Clic sur l'en-tête USINE ouvre directement Usine.pdf
+    // Clic sur l'en-tête USINE ouvre Usine.pdf
     function addUsineHeaderDirectPdf() {
         const usineHeader = document.querySelector('[data-category="usine"] .card-header');
         if (usineHeader && usineItems.length > 0) {
             usineHeader.addEventListener('click', (e) => {
                 const usinePdfItem = usineItems[0];
-                openPdf(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE`);
+                openPdf(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE - ${usinePdfItem.label}`);
             });
+        }
+    }
+    
+    // Vérification au démarrage que Usine.pdf est accessible
+    async function checkUsinePdf() {
+        const exists = await testPdfExists("Usine.pdf");
+        if (exists) {
+            console.log("✅ Usine.pdf est accessible !");
+        } else {
+            console.warn("⚠️ Usine.pdf non trouvé - vérifiez qu'il est bien dans le dépôt");
         }
     }
     
@@ -502,7 +526,8 @@
         buildTitles();
         initAccordion();
         addUsineHeaderDirectPdf();
-        console.log("✅ Dashboard prêt - Usine.pdf disponible depuis GitHub");
+        checkUsinePdf();
+        console.log("✅ Dashboard prêt");
         console.log(`📁 Base URL: ${GITHUB_RAW_BASE}`);
     }
     
