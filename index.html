@@ -2,312 +2,85 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Centre Documentation Technique - WKW</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layout Usine</title>
+
+    <!-- évite erreur favicon -->
+    <link rel="icon" href="data:,">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
-        }
-
         body {
-            background: linear-gradient(145deg, #eef2f5 0%, #d9e0e8 100%);
-            min-height: 100vh;
-            padding: 2rem 1.5rem;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
         }
 
-        .app-container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-            background: rgba(255,255,255,0.75);
-            backdrop-filter: blur(8px);
-            padding: 0.8rem 1.8rem;
-            border-radius: 60px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        .logo-area img {
-            height: 50px;
-            width: auto;
-            object-fit: contain;
-        }
-        .title-text h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #1a3c5e, #0f2c44);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .title-text p {
-            font-size: 0.8rem;
-            color: #2c4e6e;
-        }
-        .badge {
-            background: #1a2f3f;
-            padding: 0.4rem 1rem;
-            border-radius: 40px;
+        header {
+            background: #0b3d91;
             color: white;
-            font-size: 0.75rem;
+            text-align: center;
+            padding: 20px;
         }
 
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.8rem;
-            margin-bottom: 2rem;
+        .logo {
+            width: 220px;
+            max-width: 90%;
+        }
+
+        .container {
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .card {
             background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .card-header {
-            padding: 1.2rem 1.5rem;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .arrow {
-            font-size: 1.2rem;
-            transition: transform 0.3s;
-        }
-        .card-header.open .arrow {
-            transform: rotate(180deg);
-        }
-
-        .header-usine { background: linear-gradient(135deg, #1e4a6b, #0e3a55); }
-        .header-uap1 { background: linear-gradient(135deg, #2b6e4f, #1b5e3f); }
-        .header-uap2 { background: linear-gradient(135deg, #b85c1a, #9b4510); }
-        .header-log { background: linear-gradient(135deg, #5e3a6b, #442d52); }
-
-        .card-content {
-            padding: 1.2rem 1.2rem 1.5rem;
-            display: none;
-            background: #fefefe;
-        }
-        .card-content.open {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #1e4a6b;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e0e7ed;
-        }
-
-        .pdf-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.7rem;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            text-align: center;
         }
 
         .btn {
             display: inline-block;
-            padding: 0.6rem 1.2rem;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: #0b3d91;
+            color: white;
+            text-decoration: none;
             border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
+            font-size: 20px;
         }
 
-        .btn-view {
-            background: #1e4a6b;
-            color: white;
-        }
-        .btn-view:hover {
-            background: #0e3a55;
-            transform: translateY(-2px);
-        }
-
-        .btn-pdf {
-            background: #f0f4f9;
-            color: #1f3a4b;
-            border: 1px solid #cbdbe2;
-            padding: 0.5rem 1.1rem;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .btn-pdf:hover {
-            background: #1f4e6e;
-            color: white;
-        }
-
-        .footer-note {
-            text-align: center;
-            font-size: 0.75rem;
-            color: #2c5a7a;
-            margin-top: 2rem;
-            padding: 0.5rem;
+        .btn:hover {
+            background: #06285f;
         }
     </style>
 </head>
+
 <body>
-<div class="app-container">
-    <div class="header">
-        <div class="logo-area">
-            <img src="https://www.electrive.net/media/2017/04/wkw-automotive-logo-symbolbild.png" 
-                 alt="WKW Logo" 
-                 onerror="this.src='https://via.placeholder.com/50?text=WKW';">
-            <div class="title-text">
-                <h1>📄 Centre Documentation Technique</h1>
-                <p>WKW Tunisia - Usine | UAP1 | UAP2 | Logistique</p>
-            </div>
-        </div>
-        <div class="badge">
-            📁 GitHub Pages
-        </div>
-    </div>
 
-    <div class="dashboard-grid">
-        <div class="card">
-            <div class="card-header header-usine" onclick="toggleCard(this)">
-                <span>🏭 USINE</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="card-content">
-                <div class="section-title">Document principal</div>
-                <div class="pdf-grid">
-                    <button onclick="openPdf('Usine.pdf')" class="btn btn-view">
-                        📄 Voir le PDF Usine
-                    </button>
-                </div>
-            </div>
-        </div>
+<header>
+    <img
+        src="https://tse3.mm.bing.net/th/id/OIP.D3sAoHIsSv62lILMupQYwwHaC0?cb=thfc1&w=517&h=197&rs=1&pid=ImgDetMain&o=7&rm=3"
+        alt="Logo"
+        class="logo"
+    >
 
-        <div class="card">
-            <div class="card-header header-uap1" onclick="toggleCard(this)">
-                <span>⚙️ UAP1</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="card-content">
-                <div class="section-title">8 documents techniques</div>
-                <div class="pdf-grid" id="uap1-buttons"></div>
-            </div>
-        </div>
+    <h1>Layout Usine</h1>
+</header>
 
-        <div class="card">
-            <div class="card-header header-uap2" onclick="toggleCard(this)">
-                <span>🔧 UAP2</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="card-content">
-                <div class="section-title">14 documents techniques</div>
-                <div class="pdf-grid" id="uap2-buttons"></div>
-            </div>
-        </div>
+<div class="container">
+    <div class="card">
+        <h2>PDF Layout Usine</h2>
 
-        <div class="card">
-            <div class="card-header header-log" onclick="toggleCard(this)">
-                <span>📦 LOGISTIQUE</span>
-                <span class="arrow">▼</span>
-            </div>
-            <div class="card-content">
-                <div class="section-title">3 documents magasin</div>
-                <div class="pdf-grid" id="log-buttons"></div>
-            </div>
-        </div>
-    </div>
-    <div class="footer-note">
-        💡 <strong>Solution :</strong> Le PDF s'ouvre directement dans un nouvel onglet.<br>
-        ✅ Après avoir ajouté le fichier <strong>.nojekyll</strong>, votre site va publier tous les PDF.
+        <!-- IMPORTANT -->
+        <a href="./Usine.pdf" target="_blank" class="btn">
+            Open PDF
+        </a>
     </div>
 </div>
 
-<script>
-    // Utilisation de RAW GitHub (plus fiable que GitHub Pages pour les PDF)
-    const GITHUB_BASE = "https://raw.githubusercontent.com/wkwtunisia/Centre-Documentation-Technique/main/";
-    
-    // Fonction simple pour ouvrir le PDF
-    function openPdf(filename) {
-        const pdfUrl = GITHUB_BASE + filename;
-        window.open(pdfUrl, '_blank');
-    }
-    
-    // Liste des titres
-    const uap1Titles = ["F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"];
-    const uap2Titles = ["L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"];
-    const logTitles = ["magasin général", "magasin p2", "Magasin P1"];
-    
-    const uap1Container = document.getElementById('uap1-buttons');
-    uap1Titles.forEach(title => {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-pdf';
-        btn.textContent = title;
-        btn.onclick = () => openPdf(`UAP1_${title}.pdf`);
-        uap1Container.appendChild(btn);
-    });
-    
-    const uap2Container = document.getElementById('uap2-buttons');
-    uap2Titles.forEach(title => {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-pdf';
-        btn.textContent = title;
-        const safeName = title.replace(/\s+/g, '_');
-        btn.onclick = () => openPdf(`UAP2_${safeName}.pdf`);
-        uap2Container.appendChild(btn);
-    });
-    
-    const logContainer = document.getElementById('log-buttons');
-    logTitles.forEach(title => {
-        const btn = document.createElement('button');
-        btn.className = 'btn btn-pdf';
-        btn.textContent = title;
-        const fileName = `Log_${title.replace(/\s+/g, '_')}.pdf`;
-        btn.onclick = () => openPdf(fileName);
-        logContainer.appendChild(btn);
-    });
-    
-    function toggleCard(headerElement) {
-        const card = headerElement.closest('.card');
-        const content = card.querySelector('.card-content');
-        const arrow = headerElement.querySelector('.arrow');
-        content.classList.toggle('open');
-        headerElement.classList.toggle('open');
-    }
-    
-    document.addEventListener('DOMContentLoaded', () => {
-        const usineCard = document.querySelector('.card:first-child .card-content');
-        const usineHeader = document.querySelector('.card:first-child .card-header');
-        if (usineCard) {
-            usineCard.classList.add('open');
-            usineHeader.classList.add('open');
-        }
-    });
-</script>
 </body>
 </html>
