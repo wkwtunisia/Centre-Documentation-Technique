@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Dashboard Technique - Usine & Unités | Gestion PDF</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f5 0%, #d9e0e8 100%);
+            min-height: 100vh;
+            padding: 1.5rem 1.5rem 2rem;
+        }
+
+        /* Container principal */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* En-tête avec logo */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(8px);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .logo-area img {
+            height: 50px;
+            width: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .title-text h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a3c5e, #0f2c44);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .title-text p {
+            font-size: 0.8rem;
+            color: #2c4e6e;
+        }
+        .badge-github {
+            background: #1a2f3f;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-github span {
+            font-size: 1rem;
+        }
+
+        /* Grille des grandes catégories (4 blocs) */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Chaque carte principale */
+        .card-category {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(2px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+        .card-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 28px 40px -16px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-header {
+            padding: 1.2rem 1.5rem;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            cursor: pointer;
+            background-size: cover;
+            transition: filter 0.2s, transform 0.1s;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header:active { transform: scale(0.99); }
+
+        /* Couleurs distinctes pour chaque section */
+        .header-usine { background: linear-gradient(120deg, #1e4a6b, #0e3a55); }
+        .header-uap1 { background: linear-gradient(120deg, #2b6e4f, #1b5e3f); }
+        .header-uap2 { background: linear-gradient(120deg, #b85c1a, #9b4510); }
+        .header-log { background: linear-gradient(120deg, #5e3a6b, #442d52); }
+
+        .card-content {
+            padding: 1.2rem 1rem 1.5rem 1rem;
+            background: #ffffffec;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), padding 0.2s;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .card-content.open {
+            max-height: 650px;
+            padding-top: 1rem;
+            padding-bottom: 1.5rem;
+            overflow-y: auto;
+        }
+
+        /* Grille des sous-titres (boutons pdf) */
+        .titles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        .pdf-btn {
+            background: #f0f4f9;
+            border: 1px solid #cbdbe2;
+            border-radius: 60px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #1f3a4b;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            font-family: 'SF Mono', monospace;
+        }
+        .pdf-btn:hover {
+            background: #1f4e6e;
+            color: white;
+            border-color: #1f4e6e;
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2);
+        }
+        .pdf-btn:active { transform: scale(0.97); }
+
+        /* modal PDF */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(6px);
+            padding: 20px;
+        }
+        .modal-container {
+            background: white;
+            width: 90%;
+            max-width: 1100px;
+            height: 85vh;
+            border-radius: 28px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.4);
+            animation: fadeSlideUp 0.2s ease-out;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(30px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.8rem;
+            background: #1f3f5c;
+            color: white;
+        }
+        .modal-header h3 {
+            font-weight: 600;
+            font-size: 1.3rem;
+            word-break: break-word;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: white;
+            transition: 0.2s;
+        }
+        .close-modal:hover { color: #ffb347; transform: scale(1.1);}
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #f9fafb;
+        }
+        .footer-note {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #2c5a7a;
+            margin-top: 1.5rem;
+            background: rgba(255,255,240,0.8);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .card-header { font-size: 1.4rem; padding: 0.9rem 1.2rem; }
+            .pdf-btn { padding: 0.4rem 1rem; font-size: 0.75rem; }
+            .logo-area img { height: 38px; }
+            .title-text h1 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="header">
+        <div class="logo-area">
+            <img src="https://www.electrive.net/media/2017/04/wkw-automotive-logo-symbolbild.png" 
+                 alt="WKW Automotive Logo" 
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/50?text=WKW';">
+            <div class="title-text">
+                <h1>📄 Centre Documentation Technique</h1>
+                <p>Usine | UAP1 | UAP2 | Logistique · PDFs intégrés via GitHub</p>
+            </div>
+        </div>
+        <div class="badge-github">
+            <span>📁</span> GitHub PDF Repository
+        </div>
+    </div>
+
+    <div class="dashboard-grid" id="mainGrid">
+        <!-- Carte USINE : clic sur le titre "Usine" ouvre PDF Usine.pdf -->
+        <div class="card-category" data-category="usine">
+            <div class="card-header header-usine" data-cat="usine">🏭 USINE <span style="font-size:0.9rem;">▼</span></div>
+            <div class="card-content" id="content-usine">
+                <div class="titles-grid" id="usine-titles"></div>
+            </div>
+        </div>
+
+        <!-- Carte UAP1 -->
+        <div class="card-category" data-category="uap1">
+            <div class="card-header header-uap1" data-cat="uap1">⚙️ UAP1 <span style="font-size:0.9rem;">▼</span></div>
+            <div class="card-content" id="content-uap1">
+                <div class="titles-grid" id="uap1-titles"></div>
+            </div>
+        </div>
+
+        <!-- Carte UAP2 -->
+        <div class="card-category" data-category="uap2">
+            <div class="card-header header-uap2" data-cat="uap2">🔧 UAP2 <span style="font-size:0.9rem;">▼</span></div>
+            <div class="card-content" id="content-uap2">
+                <div class="titles-grid" id="uap2-titles"></div>
+            </div>
+        </div>
+
+        <!-- Carte LOGISTIQUE -->
+        <div class="card-category" data-category="logistique">
+            <div class="card-header header-log" data-cat="logistique">📦 LOGISTIQUE <span style="font-size:0.9rem;">▼</span></div>
+            <div class="card-content" id="content-logistique">
+                <div class="titles-grid" id="log-titles"></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-note">
+        💡 <strong>Configuration GitHub</strong> : Placez vos fichiers PDF (Usine.pdf, UAP1_F01.pdf, ...) dans un dossier "pdfs/" de votre dépôt GitHub.<br>
+        Utilisez l'URL brute (raw) : <code>https://raw.githubusercontent.com/VOTRE_USER/REPO/main/pdfs/NOM_FICHIER.pdf</code><br>
+        ⚡ Actuellement : démonstration avec URLs simulées + fallback explicatif. Adaptez les constantes PDF_BASE_URL.
+    </div>
+</div>
+
+<!-- Modal PDF -->
+<div id="pdfModal" class="pdf-modal">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle">Document PDF</h3>
+            <button class="close-modal" id="closeModalBtn">&times;</button>
+        </div>
+        <div id="pdfFrameContainer" style="flex:1; min-height: 0;">
+            <iframe id="pdfIframe" srcdoc="<html><body style='background:#f4f7fc;display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;'><p style='color:#2c3e66;'>📄 Chargement du document...</p></body></html>"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==============================================================
+    // CONFIGURATION GITHUB POUR LES PDF
+    // ==============================================================
+    // ⚠️ REMPLACEZ CES VALEURS PAR VOTRE DÉPÔT GITHUB (USER/REPO)
+    const GITHUB_USER = "VOTRE_USER";        // <-- À MODIFIER : votre pseudo GitHub
+    const GITHUB_REPO = "VOTRE_REPO";        // <-- À MODIFIER : nom du dépôt
+    const PDF_BASE_PATH = "pdfs";            // Dossier contenant les PDFs dans le repo
+    
+    // Fonction pour générer l'URL brute (raw) d'un fichier PDF sur GitHub
+    function getGitHubPdfUrl(filename) {
+        // Support des fichiers avec espaces ou caractères spéciaux : on encode
+        const encodedFile = encodeURIComponent(filename);
+        return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${PDF_BASE_PATH}/${encodedFile}`;
+    }
+    
+    // ========== MOCK local pour démonstration (car USER/REPO par défaut non configuré)
+    // Si les identifiants GitHub ne sont pas renseignés ou si le fichier n'existe pas,
+    // on affiche un aperçu informatif mais on tente quand même le chargement réel.
+    // Mais pour que la demande "je utilise github pour tous fichier pdf" soit respectée,
+    // le système construit les URLs brutes. L'utilisateur devra y placer ses vrais PDF.
+    // On fournit aussi un fallback pédagogique.
+    
+    // --------------------------------------------------------------
+    // LISTES DES TITRES AVEC NOMS DE FICHIERS PDF (pour github)
+    // --------------------------------------------------------------
+    // USINE : 1 seul titre "Usine" qui ouvre Usine.pdf (selon remarque: "when click usine i want pdf open name Usine")
+    const usineItems = [
+        { label: "🏭 USINE", pdfFilename: "Usine.pdf" }
+    ];
+    
+    // UAP1 : 8 titres F01, F02, F83, F99, F85, F86, L76, L77
+    const uap1Items = [
+        "F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"
+    ].map(code => ({ label: code, pdfFilename: `UAP1_${code}.pdf` }));
+    
+    // UAP2 : 14 titres exacts
+    const uap2Raw = [
+        "L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"
+    ];
+    const uap2Items = uap2Raw.map(label => {
+        // nom de fichier propre: remplacer espaces par _ et conserver casse
+        const safeName = label.replace(/\s+/g, '_');
+        return { label: label, pdfFilename: `UAP2_${safeName}.pdf` };
+    });
+    
+    // LOGISTIQUE : 3 titres magasin général, magasin p2, Magasin P1
+    const logItems = [
+        { label: "📦 magasin général", pdfFilename: "Log_magasin_general.pdf" },
+        { label: "📦 magasin p2", pdfFilename: "Log_magasin_p2.pdf" },
+        { label: "📦 Magasin P1", pdfFilename: "Log_Magasin_P1.pdf" }
+    ];
+    
+    // --------------------------------------------------------------
+    // GESTIONNAIRE PDF : tente de charger depuis GitHub, sinon fallback explicatif
+    // --------------------------------------------------------------
+    async function openPdfWithGitHub(pdfFilename, displayLabel) {
+        const modal = document.getElementById('pdfModal');
+        const iframe = document.getElementById('pdfIframe');
+        const modalTitleElem = document.getElementById('modalTitle');
+        modalTitleElem.innerText = `📄 ${displayLabel}`;
+        
+        // Construction de l'URL brute GitHub
+        let pdfUrl = "";
+        const useGitHub = (GITHUB_USER !== "VOTRE_USER" && GITHUB_REPO !== "VOTRE_REPO");
+        
+        if (useGitHub) {
+            pdfUrl = getGitHubPdfUrl(pdfFilename);
+        } else {
+            // Mode démo : générer un PDF mock explicatif pour montrer le fonctionnement
+            pdfUrl = null;
+        }
+        
+        // Fonction pour afficher un contenu éducatif dans l'iframe (fallback)
+        function showMockPdfGuide(reason) {
+            const mockHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head><meta charset="UTF-8"><title>Aperçu technique</title>
+            <style>
+                body { font-family: 'Segoe UI', system-ui; background: #fef9ef; margin: 0; display: flex; justify-content: center; align-items: center; height: 100%; padding: 2rem; }
+                .card-mock { max-width: 700px; background: white; border-radius: 32px; padding: 2rem; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2); border-left: 8px solid #1e4a6b; }
+                h2 { color: #1e4a6b; margin-bottom: 0.5rem; }
+                .info { background: #eef2fa; padding: 1rem; border-radius: 20px; margin: 1rem 0; font-family: monospace; }
+                button.dummy { background: #2c6e9e; border: none; padding: 8px 16px; border-radius: 40px; color: white; cursor: pointer; }
+            </style>
+            </head>
+            <body>
+            <div class="card-mock">
+                <h2>📄 ${displayLabel}</h2>
+                <p><strong>🔗 PDF cible :</strong> <code>${pdfFilename}</code></p>
+                <div class="info">
+                    ⚙️ <strong>Configuration GitHub requise</strong><br>
+                    - Remplacez <strong>VOTRE_USER</strong> et <strong>VOTRE_REPO</strong> dans la constante du script.<br>
+                    - Placez votre fichier <strong>${pdfFilename}</strong> dans le dossier <strong>pdfs/</strong> de votre dépôt.<br>
+                    - Exemple d'URL brute: <code>https://raw.githubusercontent.com/USER/REPO/main/pdfs/${pdfFilename}</code><br>
+                    ${reason === 'demo' ? '🎯 Actuellement mode démo: visualisation simulée.' : '⚠️ Le fichier est introuvable sur le dépôt configuré.'}
+                </div>
+                <p>✅ Une fois configuré, le vrai PDF s’affichera automatiquement.</p>
+                <button class="dummy" onclick="window.location.reload()">🔄 Rafraîchir</button>
+                <p style="margin-top:1rem; font-size:0.7rem;">💡 <em>Conseil : Vérifiez que le fichier existe et que l'URL raw est accessible publiquement.</em></p>
+            </div>
+            </body>
+            </html>`;
+            iframe.srcdoc = mockHtml;
+            iframe.src = "about:blank";
+        }
+        
+        if (useGitHub && pdfUrl) {
+            // Tentative de chargement réel du PDF depuis GitHub
+            iframe.onload = () => { /* ok */ };
+            iframe.onerror = () => { showMockPdfGuide('github_error'); };
+            // On définit un timeout pour détecter un chargement vide/erreur (car onerror pas toujours fiable pour 404)
+            const timeoutId = setTimeout(() => {
+                // Vérifie sommairement si le contenu du iframe est vide ou illisible (approche simple)
+                try {
+                    // On ne peut pas interroger directement le contenu cross-origin, mais on peut essayer via un indicateur
+                    // solution pragmatique : on laisse le fallback visible si le chargement semble problématique.
+                    // On utilise un compteur. On vérifie après 2 sec: on force fallback si on voit que rien ne s'est affiché ?
+                    // Pour rester simple, on ne fait rien de plus car le navigateur affichera une erreur. Ajoutons une logique
+                    // d'écoute : après 2.5s, si on n'a pas détecté un bon chargement (on peut pas facilement).
+                } catch(e) {}
+            }, 3000);
+            iframe.src = pdfUrl;
+            iframe.onload = () => { clearTimeout(timeoutId); };
+        } else {
+            showMockPdfGuide('demo');
+        }
+        
+        modal.style.display = 'flex';
+        
+        // Fonction de fermeture
+        const closeModal = () => {
+            modal.style.display = 'none';
+            iframe.src = "about:blank";
+            document.removeEventListener('keydown', escHandler);
+        };
+        const escHandler = (e) => { if (e.key === 'Escape') closeModal(); };
+        document.addEventListener('keydown', escHandler);
+        const closeBtn = document.getElementById('closeModalBtn');
+        closeBtn.onclick = () => closeModal();
+        modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+    }
+    
+    // ------------------------------------------------------------------
+    // Construction dynamique des interfaces + comportement "click usine voit pdf"
+    // Pour respecter la demande: "when click usine i want pdf open name Usine"
+    // Il y a deux manières: clic sur le titre "USINE" (bouton à l'intérieur) ET
+    // également clic sur l'en-tête de la carte USINE (pour plus d'intuitivité).
+    // Je fais les deux.
+    // ------------------------------------------------------------------
+    
+    function buildTitles() {
+        // USINE
+        const usineContainer = document.getElementById('usine-titles');
+        usineContainer.innerHTML = '';
+        usineItems.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'pdf-btn';
+            btn.innerText = item.label;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openPdfWithGitHub(item.pdfFilename, `Usine - ${item.label}`);
+            });
+            usineContainer.appendChild(btn);
+        });
+        
+        // UAP1
+        const uap1Container = document.getElementById('uap1-titles');
+        uap1Container.innerHTML = '';
+        uap1Items.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'pdf-btn';
+            btn.innerText = item.label;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openPdfWithGitHub(item.pdfFilename, `UAP1 - ${item.label}`);
+            });
+            uap1Container.appendChild(btn);
+        });
+        
+        // UAP2
+        const uap2Container = document.getElementById('uap2-titles');
+        uap2Container.innerHTML = '';
+        uap2Items.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'pdf-btn';
+            if(item.label.includes(' ')) btn.style.fontFamily = "monospace";
+            btn.innerText = item.label;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openPdfWithGitHub(item.pdfFilename, `UAP2 - ${item.label}`);
+            });
+            uap2Container.appendChild(btn);
+        });
+        
+        // LOGISTIQUE
+        const logContainer = document.getElementById('log-titles');
+        logContainer.innerHTML = '';
+        logItems.forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'pdf-btn';
+            btn.innerText = item.label;
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openPdfWithGitHub(item.pdfFilename, `Logistique - ${item.label}`);
+            });
+            logContainer.appendChild(btn);
+        });
+    }
+    
+    // Gestion accordéon pour ouvrir/fermer les cartes
+    function initAccordion() {
+        const headers = document.querySelectorAll('.card-header');
+        headers.forEach(header => {
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const parentCard = header.closest('.card-category');
+                const contentDiv = parentCard.querySelector('.card-content');
+                if (contentDiv) {
+                    contentDiv.classList.toggle('open');
+                }
+            });
+        });
+        // Ouvre par défaut la carte Usine pour plus de visibilité
+        const usineContent = document.getElementById('content-usine');
+        if(usineContent) usineContent.classList.add('open');
+    }
+    
+    // Ajout du comportement spécifique: clic sur l'en-tête USINE ouvre directement le PDF "Usine.pdf"
+    function addUsineHeaderDirectPdf() {
+        const usineHeader = document.querySelector('[data-category="usine"] .card-header');
+        if (usineHeader && usineItems.length > 0) {
+            // On clone l'événement mais sans supprimer l'accordéon (on va déclencher à la fois l'ouverture ET le PDF)
+            // On doit faire attention à ne pas dupliquer le comportement: On souhaite que le clic ouvre le PDF "Usine"
+            // tout en gardant l'accordéon fonctionnel. L'accordéon est géré par l'écoute ci-dessus.
+            // On ajoute une seconde écoute qui s'exécute après, mais sans conflit:
+            const originalClickHandler = usineHeader.click;
+            usineHeader.addEventListener('click', (e) => {
+                // Ouvre le PDF nommé Usine.pdf (premier élément de usineItems)
+                const usinePdfItem = usineItems[0];
+                openPdfWithGitHub(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE - ${usinePdfItem.label}`);
+            });
+        }
+    }
+    
+    // Bonus: pour la carte usine, si on clique sur le bouton "USINE" présent, cela fonctionne aussi.
+    // Mais on ajoute aussi un message d'info pour les autres cartes: aucun conflit.
+    
+    function init() {
+        buildTitles();
+        initAccordion();
+        addUsineHeaderDirectPdf();
+        
+        // Afficher un petit avertissement console pour config github
+        if(GITHUB_USER === "VOTRE_USER" || GITHUB_REPO === "VOTRE_REPO") {
+            console.info("📌 [GitHub] Pour utiliser vos vrais PDF, modifiez les constantes GITHUB_USER et GITHUB_REPO dans le code, et placez vos PDF dans le dossier 'pdfs' de votre dépôt.");
+        } else {
+            console.log(`✅ Configuration GitHub active : https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${PDF_BASE_PATH}/`);
+        }
+    }
+    
+    init();
+</script>
+</body>
+</html>
