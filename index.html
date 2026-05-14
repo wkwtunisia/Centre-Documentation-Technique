@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Dashboard Technique - Usine & Unités | Gestion PDF</title>
+    <title>Dashboard Technique - WKW Usine & Unités</title>
     <style>
         * {
             margin: 0;
@@ -18,13 +18,11 @@
             padding: 1.5rem 1.5rem 2rem;
         }
 
-        /* Container principal */
         .app-container {
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        /* En-tête avec logo */
         .header {
             display: flex;
             align-items: center;
@@ -72,11 +70,7 @@
             align-items: center;
             gap: 6px;
         }
-        .badge-github span {
-            font-size: 1rem;
-        }
 
-        /* Grille des grandes catégories (4 blocs) */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -84,7 +78,6 @@
             margin-bottom: 2rem;
         }
 
-        /* Chaque carte principale */
         .card-category {
             background: rgba(255, 255, 255, 0.94);
             backdrop-filter: blur(2px);
@@ -106,7 +99,6 @@
             color: white;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             cursor: pointer;
-            background-size: cover;
             transition: filter 0.2s, transform 0.1s;
             letter-spacing: 0.5px;
             display: flex;
@@ -115,7 +107,6 @@
         }
         .card-header:active { transform: scale(0.99); }
 
-        /* Couleurs distinctes pour chaque section */
         .header-usine { background: linear-gradient(120deg, #1e4a6b, #0e3a55); }
         .header-uap1 { background: linear-gradient(120deg, #2b6e4f, #1b5e3f); }
         .header-uap2 { background: linear-gradient(120deg, #b85c1a, #9b4510); }
@@ -137,7 +128,6 @@
             overflow-y: auto;
         }
 
-        /* Grille des sous-titres (boutons pdf) */
         .titles-grid {
             display: flex;
             flex-wrap: wrap;
@@ -166,7 +156,6 @@
         }
         .pdf-btn:active { transform: scale(0.97); }
 
-        /* modal PDF */
         .pdf-modal {
             display: none;
             position: fixed;
@@ -255,17 +244,16 @@
                  alt="WKW Automotive Logo" 
                  onerror="this.onerror=null; this.src='https://via.placeholder.com/50?text=WKW';">
             <div class="title-text">
-                <h1>📄 Centre Documentation Technique</h1>
-                <p>Usine | UAP1 | UAP2 | Logistique · PDFs intégrés via GitHub</p>
+                <h1>📄 WKW Tunisia - Documentation Technique</h1>
+                <p>Usine | UAP1 | UAP2 | Logistique · PDFs hébergés sur GitHub</p>
             </div>
         </div>
         <div class="badge-github">
-            <span>📁</span> GitHub PDF Repository
+            <span>📁</span> GitHub Repository
         </div>
     </div>
 
     <div class="dashboard-grid" id="mainGrid">
-        <!-- Carte USINE : clic sur le titre "Usine" ouvre PDF Usine.pdf -->
         <div class="card-category" data-category="usine">
             <div class="card-header header-usine" data-cat="usine">🏭 USINE <span style="font-size:0.9rem;">▼</span></div>
             <div class="card-content" id="content-usine">
@@ -273,7 +261,6 @@
             </div>
         </div>
 
-        <!-- Carte UAP1 -->
         <div class="card-category" data-category="uap1">
             <div class="card-header header-uap1" data-cat="uap1">⚙️ UAP1 <span style="font-size:0.9rem;">▼</span></div>
             <div class="card-content" id="content-uap1">
@@ -281,7 +268,6 @@
             </div>
         </div>
 
-        <!-- Carte UAP2 -->
         <div class="card-category" data-category="uap2">
             <div class="card-header header-uap2" data-cat="uap2">🔧 UAP2 <span style="font-size:0.9rem;">▼</span></div>
             <div class="card-content" id="content-uap2">
@@ -289,7 +275,6 @@
             </div>
         </div>
 
-        <!-- Carte LOGISTIQUE -->
         <div class="card-category" data-category="logistique">
             <div class="card-header header-log" data-cat="logistique">📦 LOGISTIQUE <span style="font-size:0.9rem;">▼</span></div>
             <div class="card-content" id="content-logistique">
@@ -298,13 +283,12 @@
         </div>
     </div>
     <div class="footer-note">
-        💡 <strong>Configuration GitHub</strong> : Placez vos fichiers PDF (Usine.pdf, UAP1_F01.pdf, ...) dans un dossier "pdfs/" de votre dépôt GitHub.<br>
-        Utilisez l'URL brute (raw) : <code>https://raw.githubusercontent.com/VOTRE_USER/REPO/main/pdfs/NOM_FICHIER.pdf</code><br>
-        ⚡ Actuellement : démonstration avec URLs simulées + fallback explicatif. Adaptez les constantes PDF_BASE_URL.
+        💡 <strong>Configuration GitHub</strong> : Vos fichiers PDF sont automatiquement chargés depuis ce dépôt.<br>
+        📄 <strong>Usine.pdf</strong> est déjà disponible dans la racine. Pour les autres PDF, créez les fichiers correspondants.<br>
+        🔗 URLs générées automatiquement via raw.githubusercontent.com
     </div>
 </div>
 
-<!-- Modal PDF -->
 <div id="pdfModal" class="pdf-modal">
     <div class="modal-container">
         <div class="modal-header">
@@ -312,143 +296,107 @@
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
         <div id="pdfFrameContainer" style="flex:1; min-height: 0;">
-            <iframe id="pdfIframe" srcdoc="<html><body style='background:#f4f7fc;display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;'><p style='color:#2c3e66;'>📄 Chargement du document...</p></body></html>"></iframe>
+            <iframe id="pdfIframe"></iframe>
         </div>
     </div>
 </div>
 
 <script>
     // ==============================================================
-    // CONFIGURATION GITHUB POUR LES PDF
+    // CONFIGURATION GITHUB - À ADAPTER SELON VOTRE DÉPÔT
     // ==============================================================
-    // ⚠️ REMPLACEZ CES VALEURS PAR VOTRE DÉPÔT GITHUB (USER/REPO)
-    const GITHUB_USER = "VOTRE_USER";        // <-- À MODIFIER : votre pseudo GitHub
-    const GITHUB_REPO = "VOTRE_REPO";        // <-- À MODIFIER : nom du dépôt
-    const PDF_BASE_PATH = "pdfs";            // Dossier contenant les PDFs dans le repo
+    // Détermination automatique du repository GitHub à partir de l'URL actuelle
+    // Cela fonctionne si index.html est hébergé sur GitHub Pages ou raw
+    let GITHUB_RAW_BASE = "https://raw.githubusercontent.com/wkwtunisia/wkwtunisia/main/";
     
-    // Fonction pour générer l'URL brute (raw) d'un fichier PDF sur GitHub
-    function getGitHubPdfUrl(filename) {
-        // Support des fichiers avec espaces ou caractères spéciaux : on encode
-        const encodedFile = encodeURIComponent(filename);
-        return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${PDF_BASE_PATH}/${encodedFile}`;
+    // Alternative : détection automatique si la page est ouverte depuis GitHub
+    // Pour votre cas, avec les fichiers à la racine, on utilise cette base
+    // Vous pouvez aussi modifier manuellement si nécessaire
+    
+    // Fonction pour obtenir l'URL complète du PDF
+    function getPdfUrl(filename) {
+        // Si le fichier est à la racine (comme Usine.pdf)
+        return GITHUB_RAW_BASE + filename;
     }
     
-    // ========== MOCK local pour démonstration (car USER/REPO par défaut non configuré)
-    // Si les identifiants GitHub ne sont pas renseignés ou si le fichier n'existe pas,
-    // on affiche un aperçu informatif mais on tente quand même le chargement réel.
-    // Mais pour que la demande "je utilise github pour tous fichier pdf" soit respectée,
-    // le système construit les URLs brutes. L'utilisateur devra y placer ses vrais PDF.
-    // On fournit aussi un fallback pédagogique.
-    
-    // --------------------------------------------------------------
-    // LISTES DES TITRES AVEC NOMS DE FICHIERS PDF (pour github)
-    // --------------------------------------------------------------
-    // USINE : 1 seul titre "Usine" qui ouvre Usine.pdf (selon remarque: "when click usine i want pdf open name Usine")
+    // ========== LISTES DES TITRES ==========
+    // USINE : 1 seul titre "Usine" qui ouvre Usine.pdf
     const usineItems = [
-        { label: "🏭 USINE", pdfFilename: "Usine.pdf" }
+        { label: "🏭 USINE - Documentation", pdfFilename: "Usine.pdf" }
     ];
     
-    // UAP1 : 8 titres F01, F02, F83, F99, F85, F86, L76, L77
+    // UAP1 : 8 titres
     const uap1Items = [
         "F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"
     ].map(code => ({ label: code, pdfFilename: `UAP1_${code}.pdf` }));
     
-    // UAP2 : 14 titres exacts
+    // UAP2 : 14 titres (avec espaces)
     const uap2Raw = [
         "L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"
     ];
     const uap2Items = uap2Raw.map(label => {
-        // nom de fichier propre: remplacer espaces par _ et conserver casse
         const safeName = label.replace(/\s+/g, '_');
         return { label: label, pdfFilename: `UAP2_${safeName}.pdf` };
     });
     
-    // LOGISTIQUE : 3 titres magasin général, magasin p2, Magasin P1
+    // LOGISTIQUE : 3 titres
     const logItems = [
         { label: "📦 magasin général", pdfFilename: "Log_magasin_general.pdf" },
         { label: "📦 magasin p2", pdfFilename: "Log_magasin_p2.pdf" },
         { label: "📦 Magasin P1", pdfFilename: "Log_Magasin_P1.pdf" }
     ];
     
-    // --------------------------------------------------------------
-    // GESTIONNAIRE PDF : tente de charger depuis GitHub, sinon fallback explicatif
-    // --------------------------------------------------------------
-    async function openPdfWithGitHub(pdfFilename, displayLabel) {
+    // ========== GESTIONNAIRE PDF ==========
+    function openPdf(pdfFilename, displayLabel) {
         const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdfIframe');
         const modalTitleElem = document.getElementById('modalTitle');
         modalTitleElem.innerText = `📄 ${displayLabel}`;
         
-        // Construction de l'URL brute GitHub
-        let pdfUrl = "";
-        const useGitHub = (GITHUB_USER !== "VOTRE_USER" && GITHUB_REPO !== "VOTRE_REPO");
+        const pdfUrl = getPdfUrl(pdfFilename);
+        console.log(`Chargement du PDF: ${pdfUrl}`);
         
-        if (useGitHub) {
-            pdfUrl = getGitHubPdfUrl(pdfFilename);
-        } else {
-            // Mode démo : générer un PDF mock explicatif pour montrer le fonctionnement
-            pdfUrl = null;
-        }
-        
-        // Fonction pour afficher un contenu éducatif dans l'iframe (fallback)
-        function showMockPdfGuide(reason) {
-            const mockHtml = `
-            <!DOCTYPE html>
+        // Afficher un message de chargement
+        iframe.srcdoc = `
             <html>
-            <head><meta charset="UTF-8"><title>Aperçu technique</title>
-            <style>
-                body { font-family: 'Segoe UI', system-ui; background: #fef9ef; margin: 0; display: flex; justify-content: center; align-items: center; height: 100%; padding: 2rem; }
-                .card-mock { max-width: 700px; background: white; border-radius: 32px; padding: 2rem; box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2); border-left: 8px solid #1e4a6b; }
-                h2 { color: #1e4a6b; margin-bottom: 0.5rem; }
-                .info { background: #eef2fa; padding: 1rem; border-radius: 20px; margin: 1rem 0; font-family: monospace; }
-                button.dummy { background: #2c6e9e; border: none; padding: 8px 16px; border-radius: 40px; color: white; cursor: pointer; }
-            </style>
-            </head>
-            <body>
-            <div class="card-mock">
-                <h2>📄 ${displayLabel}</h2>
-                <p><strong>🔗 PDF cible :</strong> <code>${pdfFilename}</code></p>
-                <div class="info">
-                    ⚙️ <strong>Configuration GitHub requise</strong><br>
-                    - Remplacez <strong>VOTRE_USER</strong> et <strong>VOTRE_REPO</strong> dans la constante du script.<br>
-                    - Placez votre fichier <strong>${pdfFilename}</strong> dans le dossier <strong>pdfs/</strong> de votre dépôt.<br>
-                    - Exemple d'URL brute: <code>https://raw.githubusercontent.com/USER/REPO/main/pdfs/${pdfFilename}</code><br>
-                    ${reason === 'demo' ? '🎯 Actuellement mode démo: visualisation simulée.' : '⚠️ Le fichier est introuvable sur le dépôt configuré.'}
+            <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#f5f5f5;">
+                <div style="text-align:center;">
+                    <h3>📄 Chargement du document...</h3>
+                    <p>${pdfFilename}</p>
+                    <div style="width:50px;height:50px;border:4px solid #f3f3f3;border-top:4px solid #1e4a6b;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;"></div>
+                    <style>@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>
                 </div>
-                <p>✅ Une fois configuré, le vrai PDF s’affichera automatiquement.</p>
-                <button class="dummy" onclick="window.location.reload()">🔄 Rafraîchir</button>
-                <p style="margin-top:1rem; font-size:0.7rem;">💡 <em>Conseil : Vérifiez que le fichier existe et que l'URL raw est accessible publiquement.</em></p>
-            </div>
             </body>
-            </html>`;
-            iframe.srcdoc = mockHtml;
-            iframe.src = "about:blank";
-        }
+            </html>
+        `;
         
-        if (useGitHub && pdfUrl) {
-            // Tentative de chargement réel du PDF depuis GitHub
-            iframe.onload = () => { /* ok */ };
-            iframe.onerror = () => { showMockPdfGuide('github_error'); };
-            // On définit un timeout pour détecter un chargement vide/erreur (car onerror pas toujours fiable pour 404)
-            const timeoutId = setTimeout(() => {
-                // Vérifie sommairement si le contenu du iframe est vide ou illisible (approche simple)
-                try {
-                    // On ne peut pas interroger directement le contenu cross-origin, mais on peut essayer via un indicateur
-                    // solution pragmatique : on laisse le fallback visible si le chargement semble problématique.
-                    // On utilise un compteur. On vérifie après 2 sec: on force fallback si on voit que rien ne s'est affiché ?
-                    // Pour rester simple, on ne fait rien de plus car le navigateur affichera une erreur. Ajoutons une logique
-                    // d'écoute : après 2.5s, si on n'a pas détecté un bon chargement (on peut pas facilement).
-                } catch(e) {}
-            }, 3000);
-            iframe.src = pdfUrl;
-            iframe.onload = () => { clearTimeout(timeoutId); };
-        } else {
-            showMockPdfGuide('demo');
-        }
+        // Charger le vrai PDF
+        iframe.src = pdfUrl;
+        
+        // Gestion d'erreur
+        iframe.onerror = () => {
+            iframe.srcdoc = `
+                <html>
+                <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
+                    <div style="text-align:center;max-width:500px;">
+                        <h2>⚠️ Fichier non trouvé</h2>
+                        <p>Le fichier <strong>${pdfFilename}</strong> n'existe pas encore dans le dépôt GitHub.</p>
+                        <p>📌 Pour ajouter ce document:</p>
+                        <ol style="text-align:left;margin-top:15px;">
+                            <li>Téléchargez <strong>${pdfFilename}</strong> dans votre dépôt GitHub</li>
+                            <li>Placez-le au même niveau que index.html</li>
+                            <li>Ou modifiez le chemin dans la configuration</li>
+                        </ol>
+                        <p style="margin-top:20px;">💡 Actuellement <strong>Usine.pdf</strong> est déjà disponible et fonctionne!</p>
+                    </div>
+                </body>
+                </html>
+            `;
+        };
         
         modal.style.display = 'flex';
         
-        // Fonction de fermeture
+        // Fermeture de la modale
         const closeModal = () => {
             modal.style.display = 'none';
             iframe.src = "about:blank";
@@ -461,14 +409,7 @@
         modal.onclick = (e) => { if (e.target === modal) closeModal(); };
     }
     
-    // ------------------------------------------------------------------
-    // Construction dynamique des interfaces + comportement "click usine voit pdf"
-    // Pour respecter la demande: "when click usine i want pdf open name Usine"
-    // Il y a deux manières: clic sur le titre "USINE" (bouton à l'intérieur) ET
-    // également clic sur l'en-tête de la carte USINE (pour plus d'intuitivité).
-    // Je fais les deux.
-    // ------------------------------------------------------------------
-    
+    // ========== CONSTRUCTION DE L'INTERFACE ==========
     function buildTitles() {
         // USINE
         const usineContainer = document.getElementById('usine-titles');
@@ -479,7 +420,7 @@
             btn.innerText = item.label;
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                openPdfWithGitHub(item.pdfFilename, `Usine - ${item.label}`);
+                openPdf(item.pdfFilename, `USINE - ${item.label}`);
             });
             usineContainer.appendChild(btn);
         });
@@ -493,7 +434,7 @@
             btn.innerText = item.label;
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                openPdfWithGitHub(item.pdfFilename, `UAP1 - ${item.label}`);
+                openPdf(item.pdfFilename, `UAP1 - ${item.label}`);
             });
             uap1Container.appendChild(btn);
         });
@@ -504,11 +445,10 @@
         uap2Items.forEach(item => {
             const btn = document.createElement('button');
             btn.className = 'pdf-btn';
-            if(item.label.includes(' ')) btn.style.fontFamily = "monospace";
             btn.innerText = item.label;
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                openPdfWithGitHub(item.pdfFilename, `UAP2 - ${item.label}`);
+                openPdf(item.pdfFilename, `UAP2 - ${item.label}`);
             });
             uap2Container.appendChild(btn);
         });
@@ -522,13 +462,13 @@
             btn.innerText = item.label;
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                openPdfWithGitHub(item.pdfFilename, `Logistique - ${item.label}`);
+                openPdf(item.pdfFilename, `LOGISTIQUE - ${item.label}`);
             });
             logContainer.appendChild(btn);
         });
     }
     
-    // Gestion accordéon pour ouvrir/fermer les cartes
+    // Gestion accordéon
     function initAccordion() {
         const headers = document.querySelectorAll('.card-header');
         headers.forEach(header => {
@@ -541,42 +481,29 @@
                 }
             });
         });
-        // Ouvre par défaut la carte Usine pour plus de visibilité
+        // Ouvrir Usine par défaut
         const usineContent = document.getElementById('content-usine');
         if(usineContent) usineContent.classList.add('open');
     }
     
-    // Ajout du comportement spécifique: clic sur l'en-tête USINE ouvre directement le PDF "Usine.pdf"
+    // Clic sur l'en-tête USINE ouvre directement Usine.pdf
     function addUsineHeaderDirectPdf() {
         const usineHeader = document.querySelector('[data-category="usine"] .card-header');
         if (usineHeader && usineItems.length > 0) {
-            // On clone l'événement mais sans supprimer l'accordéon (on va déclencher à la fois l'ouverture ET le PDF)
-            // On doit faire attention à ne pas dupliquer le comportement: On souhaite que le clic ouvre le PDF "Usine"
-            // tout en gardant l'accordéon fonctionnel. L'accordéon est géré par l'écoute ci-dessus.
-            // On ajoute une seconde écoute qui s'exécute après, mais sans conflit:
-            const originalClickHandler = usineHeader.click;
             usineHeader.addEventListener('click', (e) => {
-                // Ouvre le PDF nommé Usine.pdf (premier élément de usineItems)
                 const usinePdfItem = usineItems[0];
-                openPdfWithGitHub(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE - ${usinePdfItem.label}`);
+                openPdf(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE`);
             });
         }
     }
     
-    // Bonus: pour la carte usine, si on clique sur le bouton "USINE" présent, cela fonctionne aussi.
-    // Mais on ajoute aussi un message d'info pour les autres cartes: aucun conflit.
-    
+    // Initialisation
     function init() {
         buildTitles();
         initAccordion();
         addUsineHeaderDirectPdf();
-        
-        // Afficher un petit avertissement console pour config github
-        if(GITHUB_USER === "VOTRE_USER" || GITHUB_REPO === "VOTRE_REPO") {
-            console.info("📌 [GitHub] Pour utiliser vos vrais PDF, modifiez les constantes GITHUB_USER et GITHUB_REPO dans le code, et placez vos PDF dans le dossier 'pdfs' de votre dépôt.");
-        } else {
-            console.log(`✅ Configuration GitHub active : https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/${PDF_BASE_PATH}/`);
-        }
+        console.log("✅ Dashboard prêt - Usine.pdf disponible depuis GitHub");
+        console.log(`📁 Base URL: ${GITHUB_RAW_BASE}`);
     }
     
     init();
