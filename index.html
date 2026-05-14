@@ -177,7 +177,6 @@
             transform: scale(1.02);
         }
 
-        /* Modal pour afficher le PDF */
         .pdf-modal {
             display: none;
             position: fixed;
@@ -263,7 +262,6 @@
     </div>
 
     <div class="dashboard-grid">
-        <!-- CARTE USINE -->
         <div class="card">
             <div class="card-header header-usine" onclick="toggleCard(this)">
                 <span>🏭 USINE</span>
@@ -272,7 +270,6 @@
             <div class="card-content">
                 <div class="section-title">Document principal</div>
                 <div class="pdf-grid">
-                    <!-- Bouton qui OUVRE le PDF sans téléchargement -->
                     <button onclick="openPdfInModal('Usine.pdf', 'USINE - Documentation')" class="btn btn-view">
                         📄 Voir le PDF Usine
                     </button>
@@ -280,7 +277,6 @@
             </div>
         </div>
 
-        <!-- CARTE UAP1 -->
         <div class="card">
             <div class="card-header header-uap1" onclick="toggleCard(this)">
                 <span>⚙️ UAP1</span>
@@ -292,7 +288,6 @@
             </div>
         </div>
 
-        <!-- CARTE UAP2 -->
         <div class="card">
             <div class="card-header header-uap2" onclick="toggleCard(this)">
                 <span>🔧 UAP2</span>
@@ -304,7 +299,6 @@
             </div>
         </div>
 
-        <!-- CARTE LOGISTIQUE -->
         <div class="card">
             <div class="card-header header-log" onclick="toggleCard(this)">
                 <span>📦 LOGISTIQUE</span>
@@ -317,12 +311,10 @@
         </div>
     </div>
     <div class="footer-note">
-        💡 <strong>Astuce :</strong> Le PDF s'ouvre directement dans la fenêtre (pas de téléchargement).<br>
-        📄 <strong>Usine.pdf</strong> est déjà configuré et fonctionnel !
+        💡 <strong>Solution :</strong> Utilisation de GitHub Pages + Google Docs Viewer pour afficher les PDF sans téléchargement.
     </div>
 </div>
 
-<!-- Modal pour afficher le PDF -->
 <div id="pdfModal" class="pdf-modal">
     <div class="modal-container">
         <div class="modal-header">
@@ -334,73 +326,35 @@
 </div>
 
 <script>
-    // Configuration GitHub - votre dépôt correct
+    // Utilisation de GitHub Pages (une fois activé)
+    // Pour l'instant, on utilise toujours Raw MAIS on passe par Google Docs Viewer
     const GITHUB_BASE = "https://raw.githubusercontent.com/wkwtunisia/Centre-Documentation-Technique/main/";
     
-    // Alternative: Utiliser GitHub Pages (si activé) - OUVRE DIRECTEMENT LE PDF
-    // Pour que ça s'ouvre sans téléchargement, on utilise Google Docs Viewer ou on embed directement
+    // Solution : Utiliser Google Docs Viewer pour forcer l'affichage
     function getPdfViewerUrl(pdfUrl) {
-        // Méthode 1: Embed direct (fonctionne sur la plupart des navigateurs)
-        return pdfUrl;
-        // Méthode 2: Utiliser Google Docs Viewer (alternative)
-        // return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+        // Google Docs Viewer convertit et affiche le PDF
+        return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
     }
     
-    // Fonction pour ouvrir le PDF dans la modale (AFFICHAGE, pas téléchargement)
     function openPdfInModal(filename, title) {
         const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdfIframe');
         const modalTitle = document.getElementById('modalTitle');
         
-        const pdfUrl = GITHUB_BASE + filename;
+        const rawPdfUrl = GITHUB_BASE + filename;
+        // Utiliser Google Docs Viewer pour afficher le PDF
+        const viewerUrl = getPdfViewerUrl(rawPdfUrl);
+        
         modalTitle.textContent = `📄 ${title}`;
         
-        // Afficher un message de chargement
-        iframe.srcdoc = `
-            <html>
-            <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#f5f5f5;">
-                <div style="text-align:center;">
-                    <h3>⏳ Chargement du PDF...</h3>
-                    <p>${filename}</p>
-                    <div style="width:40px;height:40px;border:3px solid #f3f3f3;border-top:3px solid #1e4a6b;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;"></div>
-                    <style>@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>
-                </div>
-            </body>
-            </html>
-        `;
-        
-        // Charger le PDF dans l'iframe (s'affiche directement)
-        iframe.src = pdfUrl;
-        
-        // Afficher la modale
+        iframe.src = viewerUrl;
         modal.style.display = 'flex';
-        
-        // Gestionnaire d'erreur si le PDF ne charge pas
-        iframe.onerror = () => {
-            iframe.srcdoc = `
-                <html>
-                <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
-                    <div style="text-align:center;">
-                        <h2>⚠️ PDF non trouvé</h2>
-                        <p>Le fichier <strong>${filename}</strong> n'existe pas encore.</p>
-                        <p>📌 Uploadez-le sur GitHub dans le dépôt <strong>Centre-Documentation-Technique</strong></p>
-                    </div>
-                </body>
-                </html>
-            `;
-        };
     }
     
-    // Liste des titres UAP1
     const uap1Titles = ["F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"];
-    
-    // Liste des titres UAP2
     const uap2Titles = ["L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"];
-    
-    // Liste Logistique
     const logTitles = ["magasin général", "magasin p2", "Magasin P1"];
     
-    // Créer les boutons pour UAP1
     const uap1Container = document.getElementById('uap1-buttons');
     uap1Titles.forEach(title => {
         const btn = document.createElement('button');
@@ -410,7 +364,6 @@
         uap1Container.appendChild(btn);
     });
     
-    // Créer les boutons pour UAP2
     const uap2Container = document.getElementById('uap2-buttons');
     uap2Titles.forEach(title => {
         const btn = document.createElement('button');
@@ -421,7 +374,6 @@
         uap2Container.appendChild(btn);
     });
     
-    // Créer les boutons pour LOGISTIQUE
     const logContainer = document.getElementById('log-buttons');
     logTitles.forEach(title => {
         const btn = document.createElement('button');
@@ -432,17 +384,14 @@
         logContainer.appendChild(btn);
     });
     
-    // Fonction pour toggle l'accordéon
     function toggleCard(headerElement) {
         const card = headerElement.closest('.card');
         const content = card.querySelector('.card-content');
         const arrow = headerElement.querySelector('.arrow');
-        
         content.classList.toggle('open');
         headerElement.classList.toggle('open');
     }
     
-    // Fermeture de la modale
     const modal = document.getElementById('pdfModal');
     const closeBtn = document.getElementById('closeModalBtn');
     const iframe = document.getElementById('pdfIframe');
@@ -459,7 +408,6 @@
         }
     };
     
-    // Ouvrir la carte USINE par défaut
     document.addEventListener('DOMContentLoaded', () => {
         const usineCard = document.querySelector('.card:first-child .card-content');
         const usineHeader = document.querySelector('.card:first-child .card-header');
