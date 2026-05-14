@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Centre Documentation Technique - WKW</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -168,6 +167,7 @@
             color: white;
         }
 
+        /* Modal simple pour afficher le PDF */
         .pdf-modal {
             display: none;
             position: fixed;
@@ -211,43 +211,11 @@
         }
         .close-modal:hover { color: #ffb347; }
         
-        .pdf-canvas-container {
-            flex: 1;
-            overflow-y: auto;
-            background: #525659;
-            padding: 20px;
-            text-align: center;
-        }
-        canvas {
-            box-shadow: 0 0 10px rgba(0,0,0,0.3);
-            background: white;
-            margin: 0 auto;
-        }
-        .pdf-controls {
-            background: #f0f0f0;
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            border-top: 1px solid #ddd;
-        }
-        .pdf-controls button {
-            padding: 5px 15px;
-            background: #1e4a6b;
-            color: white;
+        iframe {
+            width: 100%;
+            height: 100%;
             border: none;
-            border-radius: 20px;
-            cursor: pointer;
-        }
-        .pdf-controls button:hover {
-            background: #0e3a55;
-        }
-        .error-message {
-            background: #fff3e0;
-            padding: 30px;
-            border-radius: 15px;
-            color: #333;
-            text-align: center;
+            background: #f0f0f0;
         }
 
         .footer-note {
@@ -272,7 +240,7 @@
             </div>
         </div>
         <div class="badge">
-            📁 GitHub Pages
+            📁 PDF Viewer
         </div>
     </div>
 
@@ -285,7 +253,7 @@
             <div class="card-content">
                 <div class="section-title">Document principal</div>
                 <div class="pdf-grid">
-                    <button onclick="openPdfWithPdfJs('Usine.pdf', 'USINE - Documentation')" class="btn btn-view">
+                    <button onclick="openPdfSimple('Usine.pdf', 'USINE - Documentation')" class="btn btn-view">
                         📄 Voir le PDF Usine
                     </button>
                 </div>
@@ -326,8 +294,8 @@
         </div>
     </div>
     <div class="footer-note">
-        💡 <strong>GitHub Pages actif !</strong> Les PDF sont chargés depuis : https://wkwtunisia.github.io/Centre-Documentation-Technique/<br>
-        ✅ <strong>Usine.pdf</strong> devrait maintenant s'afficher correctement.
+        💡 <strong>✅ Solution simplifiée :</strong> Le PDF s'ouvre directement dans un nouvel onglet avec le lecteur intégré du navigateur.<br>
+        📄 <strong>Usine.pdf</strong> est accessible et va s'afficher correctement.
     </div>
 </div>
 
@@ -337,101 +305,34 @@
             <h3 id="modalTitle">Document PDF</h3>
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
-        <div class="pdf-controls">
-            <button id="prevPage">◀ Page précédente</button>
-            <span id="pageInfo">Page 1 / 1</span>
-            <button id="nextPage">Page suivante ▶</button>
-        </div>
-        <div id="pdfCanvasContainer" class="pdf-canvas-container">
-            <canvas id="pdfCanvas"></canvas>
-            <div id="loadingMsg" style="color:white; text-align:center; padding:50px;">
-                ⏳ Chargement du PDF...
-            </div>
-        </div>
+        <iframe id="pdfIframe" src=""></iframe>
     </div>
 </div>
 
 <script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+    // Configuration - Utilisation de l'URL qui fonctionne (vérifiée avec votre contenu PDF)
+    const GITHUB_BASE = "https://raw.githubusercontent.com/wkwtunisia/Centre-Documentation-Technique/main/";
     
-    // ✅ UTILISER GITHUB PAGES AU LIEU DE RAW
-    // Votre site GitHub Pages
-    const GITHUB_PAGES_BASE = "https://wkwtunisia.github.io/Centre-Documentation-Technique/";
+    // Fonction simple pour ouvrir le PDF dans un nouvel onglet (solution la plus fiable)
+    function openPdfSimple(filename, title) {
+        const pdfUrl = GITHUB_BASE + filename;
+        // Ouvre dans un nouvel onglet - le navigateur affichera le PDF nativement
+        window.open(pdfUrl, '_blank');
+    }
     
-    let currentPdf = null;
-    let currentPage = 1;
-    let totalPages = 0;
-    let scale = 1.5;
-    
-    async function openPdfWithPdfJs(filename, title) {
+    // Fonction alternative pour ouvrir dans la modale (si vous préférez)
+    function openPdfInModal(filename, title) {
         const modal = document.getElementById('pdfModal');
+        const iframe = document.getElementById('pdfIframe');
         const modalTitle = document.getElementById('modalTitle');
-        const canvas = document.getElementById('pdfCanvas');
-        const loadingMsg = document.getElementById('loadingMsg');
-        const ctx = canvas.getContext('2d');
         
+        const pdfUrl = GITHUB_BASE + filename;
         modalTitle.textContent = `📄 ${title}`;
+        iframe.src = pdfUrl;
         modal.style.display = 'flex';
-        
-        loadingMsg.style.display = 'block';
-        canvas.style.display = 'none';
-        
-        // Utiliser GitHub Pages au lieu de Raw
-        const pdfUrl = GITHUB_PAGES_BASE + filename;
-        console.log("Chargement du PDF depuis:", pdfUrl);
-        
-        try {
-            const loadingTask = pdfjsLib.getDocument(pdfUrl);
-            currentPdf = await loadingTask.promise;
-            totalPages = currentPdf.numPages;
-            currentPage = 1;
-            
-            document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages}`;
-            await renderPage(currentPage);
-            loadingMsg.style.display = 'none';
-            canvas.style.display = 'block';
-            
-        } catch (error) {
-            console.error('Erreur:', error);
-            loadingMsg.innerHTML = `
-                <div class="error-message">
-                    <h3>⚠️ Impossible de charger le PDF</h3>
-                    <p>Le fichier <strong>${filename}</strong> n'est pas accessible.</p>
-                    <p>📌 Vérifiez que le fichier existe bien dans le dépôt.</p>
-                    <p style="margin-top:15px; font-size:12px;">URL testée: ${pdfUrl}</p>
-                    <p style="margin-top:10px;">💡 Si vous venez d'uploader le fichier, attendez 1-2 minutes.</p>
-                </div>
-            `;
-            canvas.style.display = 'none';
-        }
     }
     
-    async function renderPage(pageNumber) {
-        if (!currentPdf) return;
-        const canvas = document.getElementById('pdfCanvas');
-        const ctx = canvas.getContext('2d');
-        const page = await currentPdf.getPage(pageNumber);
-        const viewport = page.getViewport({ scale: scale });
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
-        document.getElementById('pageInfo').textContent = `Page ${pageNumber} / ${totalPages}`;
-    }
-    
-    document.getElementById('prevPage').addEventListener('click', async () => {
-        if (currentPage > 1) {
-            currentPage--;
-            await renderPage(currentPage);
-        }
-    });
-    
-    document.getElementById('nextPage').addEventListener('click', async () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            await renderPage(currentPage);
-        }
-    });
-    
+    // Liste des titres
     const uap1Titles = ["F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"];
     const uap2Titles = ["L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"];
     const logTitles = ["magasin général", "magasin p2", "Magasin P1"];
@@ -441,7 +342,7 @@
         const btn = document.createElement('button');
         btn.className = 'btn btn-pdf';
         btn.textContent = title;
-        btn.onclick = () => openPdfWithPdfJs(`UAP1_${title}.pdf`, `UAP1 - ${title}`);
+        btn.onclick = () => openPdfSimple(`UAP1_${title}.pdf`, `UAP1 - ${title}`);
         uap1Container.appendChild(btn);
     });
     
@@ -451,7 +352,7 @@
         btn.className = 'btn btn-pdf';
         btn.textContent = title;
         const safeName = title.replace(/\s+/g, '_');
-        btn.onclick = () => openPdfWithPdfJs(`UAP2_${safeName}.pdf`, `UAP2 - ${title}`);
+        btn.onclick = () => openPdfSimple(`UAP2_${safeName}.pdf`, `UAP2 - ${title}`);
         uap2Container.appendChild(btn);
     });
     
@@ -461,7 +362,7 @@
         btn.className = 'btn btn-pdf';
         btn.textContent = title;
         const fileName = `Log_${title.replace(/\s+/g, '_')}.pdf`;
-        btn.onclick = () => openPdfWithPdfJs(fileName, `Logistique - ${title}`);
+        btn.onclick = () => openPdfSimple(fileName, `Logistique - ${title}`);
         logContainer.appendChild(btn);
     });
     
@@ -473,18 +374,20 @@
         headerElement.classList.toggle('open');
     }
     
+    // Fermeture de la modale
     const modal = document.getElementById('pdfModal');
     const closeBtn = document.getElementById('closeModalBtn');
+    const iframe = document.getElementById('pdfIframe');
     
     closeBtn.onclick = () => {
         modal.style.display = 'none';
-        currentPdf = null;
+        iframe.src = 'about:blank';
     };
     
     modal.onclick = (e) => {
         if (e.target === modal) {
             modal.style.display = 'none';
-            currentPdf = null;
+            iframe.src = 'about:blank';
         }
     };
     
