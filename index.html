@@ -2,312 +2,413 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Centre Documentation Technique</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Centre Documentation Technique | Accès rapide aux fiches PDF</title>
   <link rel="icon" href="data:,">
 
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    body{
-      font-family: Arial, sans-serif;
-      background:#f2f2f2;
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #eef2f5;
+      line-height: 1.4;
     }
 
-    header{
-      background:#0b3d91;
-      color:white;
-      text-align:center;
-      padding:25px;
+    /* HEADER amélioré */
+    header {
+      background: linear-gradient(135deg, #0a2f6c 0%, #0b3d91 100%);
+      color: white;
+      text-align: center;
+      padding: 1.8rem 1rem;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+      border-bottom: 3px solid #ffcd2e;
     }
 
-    .logo{
-      width:220px;
-      max-width:90%;
-      margin-bottom:10px;
+    .logo {
+      width: 230px;
+      max-width: 85%;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      padding: 6px 12px;
+      transition: transform 0.2s ease;
     }
 
-    h1{
-      margin-top:10px;
+    .logo:hover {
+      transform: scale(1.02);
     }
 
-    .container{
-      width:90%;
-      max-width:1200px;
-      margin:40px auto;
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-top: 8px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 
-    .menu-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-      gap:20px;
+    /* container principal */
+    .container {
+      width: 92%;
+      max-width: 1300px;
+      margin: 45px auto;
+      min-height: 60vh;
     }
 
-    .card{
-      background:white;
-      border-radius:12px;
-      padding:25px;
-      text-align:center;
-      box-shadow:0 4px 10px rgba(0,0,0,0.15);
-      transition:0.3s;
+    /* grille principale + grilles internes */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 28px;
     }
 
-    .card:hover{
-      transform:translateY(-5px);
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 1.8rem 1.2rem;
+      text-align: center;
+      box-shadow: 0 12px 22px -8px rgba(0, 0, 0, 0.12);
+      transition: all 0.25s ease-in-out;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      backdrop-filter: blur(0px);
     }
 
-    .card button{
-      margin-top:15px;
-      padding:12px 25px;
-      border:none;
-      background:#0b3d91;
-      color:white;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:16px;
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 30px -12px rgba(0, 0, 0, 0.2);
+      border-color: #cfdeff;
     }
 
-    .card button:hover{
-      background:#06285f;
+    .card h2, .card h3 {
+      color: #0b3d91;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+      font-size: 1.65rem;
     }
 
-    .hidden{
-      display:none;
+    .card h3 {
+      font-size: 1.45rem;
     }
 
-    .back-btn{
-      margin-bottom:25px;
-      padding:10px 20px;
-      border:none;
-      background:#444;
-      color:white;
-      border-radius:8px;
-      cursor:pointer;
+    /* boutons génériques */
+    .card button {
+      margin-top: 18px;
+      padding: 12px 28px;
+      border: none;
+      background: #0b3d91;
+      color: white;
+      border-radius: 48px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: 0.2s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .pdf-link{
-      display:block;
-      margin-top:10px;
-      text-decoration:none;
-      color:white;
-      background:#0b3d91;
-      padding:12px;
-      border-radius:8px;
+    .card button:hover {
+      background: #06285f;
+      transform: scale(0.97);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    .pdf-link:hover{
-      background:#06285f;
+    /* bouton retour (Back) */
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 32px;
+      padding: 10px 26px;
+      border: none;
+      background: #2c3e50;
+      color: white;
+      border-radius: 60px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
 
+    .back-btn:hover {
+      background: #1e2f3e;
+      transform: translateX(-4px);
+    }
+
+    /* style liens PDF (style carte améliorée) */
+    .pdf-link {
+      display: inline-block;
+      margin-top: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      background: #0b3d91;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 48px;
+      transition: all 0.2s;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      width: 85%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .pdf-link:hover {
+      background: #ff8c1a;
+      transform: scale(0.96);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    /* section cachée */
+    .hidden {
+      display: none;
+    }
+
+    /* sous-grilles pour fiches techniques avec plus d'espace */
+    .sub-grid {
+      margin-top: 16px;
+    }
+
+    /* message placeholder pour éviter contenu vide */
+    .info-note {
+      font-size: 0.85rem;
+      color: #2c5282;
+      margin-top: 20px;
+      text-align: center;
+      background: #e9f0fc;
+      border-radius: 60px;
+      padding: 10px;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* responsive fine */
+    @media (max-width: 680px) {
+      .container {
+        width: 95%;
+        margin: 25px auto;
+      }
+      .card {
+        padding: 1.2rem 0.8rem;
+      }
+      .pdf-link {
+        width: 90%;
+        font-size: 0.85rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
   </style>
 </head>
 
 <body>
 
 <header>
-
   <img
     src="https://tse3.mm.bing.net/th/id/OIP.D3sAoHIsSv62lILMupQYwwHaC0?cb=thfc1&w=517&h=197&rs=1&pid=ImgDetMain&o=7&rm=3"
     class="logo"
-    alt="logo"
+    alt="Logo Centre Documentation Technique"
+    loading="eager"
   >
-
-  <h1>Centre Documentation Technique</h1>
-
+  <h1>📘 Centre Documentation Technique</h1>
+  <p style="font-size: 0.95rem; opacity: 0.85; margin-top: 6px;">Accès rapide aux notices, schémas et fiches processus</p>
 </header>
 
 <div class="container">
 
-  <!-- HOME PAGE -->
+  <!-- PAGE D'ACCUEIL (HOME) avec cartes principales -->
   <div id="homePage">
-
     <div class="menu-grid">
-
       <div class="card">
-        <h2>Usine</h2>
-        <button onclick="showSection('usineSection')">
-          Open
-        </button>
+        <h2>🏭 Usine</h2>
+        <p style="margin: 12px 0; color: #2c3e50;">Documentation générale des infrastructures</p>
+        <button onclick="showSection('usineSection')">📂 Ouvrir</button>
       </div>
 
       <div class="card">
-        <h2>UAP1</h2>
-        <button onclick="showSection('uap1Section')">
-          Open
-        </button>
+        <h2>⚙️ UAP1</h2>
+        <p style="margin: 12px 0; color: #2c3e50;">Atelier & lignes process — F01 à L77</p>
+        <button onclick="showSection('uap1Section')">📂 Ouvrir</button>
       </div>
 
       <div class="card">
-        <h2>UAP2</h2>
-        <button onclick="showSection('uap2Section')">
-          Open
-        </button>
+        <h2>🔧 UAP2</h2>
+        <p style="margin: 12px 0; color: #2c3e50;">Unités de production avancées (L84 à F24)</p>
+        <button onclick="showSection('uap2Section')">📂 Ouvrir</button>
       </div>
 
       <div class="card">
-        <h2>Logestique</h2>
-        <button onclick="showSection('logSection')">
-          Open
-        </button>
+        <h2>📦 Logistique</h2>
+        <p style="margin: 12px 0; color: #2c3e50;">Magasins et gestion des stocks</p>
+        <button onclick="showSection('logSection')">📂 Ouvrir</button>
       </div>
-
     </div>
-
+    <div class="info-note">
+      💡 Cliquez sur "Ouvrir" pour accéder aux documents techniques au format PDF
+    </div>
   </div>
 
-  <!-- USINE -->
+  <!-- SECTION USINE -->
   <div id="usineSection" class="hidden">
-
-    <button class="back-btn" onclick="goHome()">
-      Back
-    </button>
-
-    <div class="card">
-      <h2>Usine PDF</h2>
-
-      <a href="Usine.pdf" target="_blank" class="pdf-link">
-        Open PDF
+    <button class="back-btn" onclick="goHome()">← Retour accueil</button>
+    <div class="card" style="max-width: 550px; margin: 0 auto; text-align: center;">
+      <h2>📄 Documentation Usine</h2>
+      <p style="margin: 15px 0; color: #2d3748;">Plans directeurs, normes de sécurité, process généraux.</p>
+      <a href="Usine.pdf" target="_blank" rel="noopener noreferrer" class="pdf-link" style="width: auto; padding: 12px 28px;">
+        📑 Usine.pdf
       </a>
     </div>
-
   </div>
 
-  <!-- UAP1 -->
+  <!-- SECTION UAP1 : Liste complète des références AVEC NOMS PERSONNALISÉS -->
   <div id="uap1Section" class="hidden">
-
-    <button class="back-btn" onclick="goHome()">
-      Back
-    </button>
-
+    <button class="back-btn" onclick="goHome()">← Retour accueil</button>
+    <h3 style="margin-bottom: 1.2rem; color: #0b3d91; font-weight: 600; border-left: 5px solid #ffcd2e; padding-left: 15px;">
+      📁 UAP1 - Références techniques
+    </h3>
     <div class="menu-grid">
-
-      <div class="card"><h3>F01</h3><a href="F01.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F02</h3><a href="F02.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F83</h3><a href="F83.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F99</h3><a href="F99.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F85</h3><a href="F85.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F86</h3><a href="F86.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>L76</h3><a href="L76.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>L77</h3><a href="L77.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
+      <!-- F01 + F02 avec nom "Lay out F01 F02.pdf" mais liens séparés selon structure -->
+      <div class="card"><h3>🔹 F01</h3><a href="F01.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Lay out F01 F02.pdf</a></div>
+      <div class="card"><h3>🔹 F02</h3><a href="F02.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Lay out F01 F02.pdf</a></div>
+      <!-- F83 avec "Lay out F83" -->
+      <div class="card"><h3>🔹 F83</h3><a href="F83.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Lay out F83</a></div>
+      <!-- F99 avec "F99 et Valmet.pdf" -->
+      <div class="card"><h3>🔹 F99</h3><a href="F99.pdf" target="_blank" rel="noopener" class="pdf-link">📄 F99 et Valmet.pdf</a></div>
+      <!-- F85 + F86 avec nom "F85 F86.pdf" -->
+      <div class="card"><h3>🔹 F85</h3><a href="F85.pdf" target="_blank" rel="noopener" class="pdf-link">📄 F85 F86.pdf</a></div>
+      <div class="card"><h3>🔹 F86</h3><a href="F86.pdf" target="_blank" rel="noopener" class="pdf-link">📄 F85 F86.pdf</a></div>
+      <!-- L76 + L77 avec nom "l76 l77.pdf" -->
+      <div class="card"><h3>🔹 L76</h3><a href="L76.pdf" target="_blank" rel="noopener" class="pdf-link">📄 l76 l77.pdf</a></div>
+      <div class="card"><h3>🔹 L77</h3><a href="L77.pdf" target="_blank" rel="noopener" class="pdf-link">📄 l76 l77.pdf</a></div>
     </div>
-
+    <div class="info-note" style="margin-top: 32px;">
+      ✅ 8 documents disponibles pour UAP1 — Noms affichés selon spécifications (layout, F99 et Valmet, etc.)
+    </div>
   </div>
 
-  <!-- UAP2 -->
+  <!-- SECTION UAP2 : Large collection de fiches -->
   <div id="uap2Section" class="hidden">
-
-    <button class="back-btn" onclick="goHome()">
-      Back
-    </button>
-
+    <button class="back-btn" onclick="goHome()">← Retour accueil</button>
+    <h3 style="margin-bottom: 1.2rem; color: #0b3d91; font-weight: 600; border-left: 5px solid #ffcd2e; padding-left: 15px;">
+      ⚙️ UAP2 - Fiches process & machines lourdes
+    </h3>
     <div class="menu-grid">
-
-      <div class="card"><h3>L84</h3><a href="L84.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F31</h3><a href="F31.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F87</h3><a href="F87.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F15</h3><a href="F15.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>A12</h3><a href="A12.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>50T</h3><a href="50T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>80T</h3><a href="80T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>120T</h3><a href="120T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>125T</h3><a href="125T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>520T</h3><a href="520T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>550T</h3><a href="550T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>420T</h3><a href="420T.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F06</h3><a href="F06.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
-      <div class="card"><h3>F24</h3><a href="F24.pdf" target="_blank" class="pdf-link">Open PDF</a></div>
-
+      <div class="card"><h3>📄 L84</h3><a href="L84.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 F31</h3><a href="F31.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 F87</h3><a href="F87.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 F15</h3><a href="F15.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 A12</h3><a href="A12.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 50T</h3><a href="50T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 80T</h3><a href="80T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 120T</h3><a href="120T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 125T</h3><a href="125T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 520T</h3><a href="520T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 550T</h3><a href="550T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 420T</h3><a href="420T.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 F06</h3><a href="F06.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
+      <div class="card"><h3>📄 F24</h3><a href="F24.pdf" target="_blank" class="pdf-link">Ouvrir PDF →</a></div>
     </div>
-
+    <div class="info-note" style="margin-top: 30px;">
+      📌 UAP2 : 14 références disponibles — presses et fiches de maintenance
+    </div>
   </div>
 
-  <!-- LOGESTIQUE -->
+  <!-- SECTION LOGESTIQUE (Logistique) -->
   <div id="logSection" class="hidden">
-
-    <button class="back-btn" onclick="goHome()">
-      Back
-    </button>
-
+    <button class="back-btn" onclick="goHome()">← Retour accueil</button>
+    <h3 style="margin-bottom: 1.2rem; color: #0b3d91; font-weight: 600; border-left: 5px solid #ffcd2e; padding-left: 15px;">
+      🚚 Logistique & gestion des magasins
+    </h3>
     <div class="menu-grid">
-
       <div class="card">
-        <h3>Magasin General</h3>
-        <a href="MagasinGeneral.pdf" target="_blank" class="pdf-link">
-          Open PDF
-        </a>
+        <h3>🏬 Magasin General</h3>
+        <p style="font-size: 0.85rem; margin: 8px 0; color:#2c5282;">Inventaire central, pièces transverses</p>
+        <a href="MagasinGeneral.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Ouvrir PDF</a>
       </div>
-
       <div class="card">
-        <h3>Magasin P2</h3>
-        <a href="MagasinP2.pdf" target="_blank" class="pdf-link">
-          Open PDF
-        </a>
+        <h3>📦 Magasin P2</h3>
+        <p style="font-size: 0.85rem; margin: 8px 0; color:#2c5282;">Stock consommables zone production</p>
+        <a href="MagasinP2.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Ouvrir PDF</a>
       </div>
-
       <div class="card">
-        <h3>Magasin P1</h3>
-        <a href="MagasinP1.pdf" target="_blank" class="pdf-link">
-          Open PDF
-        </a>
+        <h3>📋 Magasin P1</h3>
+        <p style="font-size: 0.85rem; margin: 8px 0; color:#2c5282;">Outillage et fournitures techniques</p>
+        <a href="MagasinP1.pdf" target="_blank" rel="noopener" class="pdf-link">📄 Ouvrir PDF</a>
       </div>
-
     </div>
-
+    <div class="info-note">
+      🧾 Les documents logistiques décrivent les procédures d'approvisionnement et de gestion des stocks.
+    </div>
   </div>
 
 </div>
 
 <script>
+  // Fonction robuste pour afficher la section sélectionnée et masquer les autres
+  function showSection(sectionId) {
+    // Éléments principaux
+    const home = document.getElementById('homePage');
+    const usine = document.getElementById('usineSection');
+    const uap1 = document.getElementById('uap1Section');
+    const uap2 = document.getElementById('uap2Section');
+    const logistique = document.getElementById('logSection');
 
-  function showSection(sectionId){
+    // Vérifier que tous les éléments existent (sécurité)
+    if (home) home.classList.add('hidden');
+    if (usine) usine.classList.add('hidden');
+    if (uap1) uap1.classList.add('hidden');
+    if (uap2) uap2.classList.add('hidden');
+    if (logistique) logistique.classList.add('hidden');
 
-    document.getElementById('homePage').classList.add('hidden');
-
-    document.getElementById('usineSection').classList.add('hidden');
-    document.getElementById('uap1Section').classList.add('hidden');
-    document.getElementById('uap2Section').classList.add('hidden');
-    document.getElementById('logSection').classList.add('hidden');
-
-    document.getElementById(sectionId).classList.remove('hidden');
+    // Afficher la section demandée
+    const activeSection = document.getElementById(sectionId);
+    if (activeSection) {
+      activeSection.classList.remove('hidden');
+      // Optionnel: scroll léger en haut pour meilleure expérience
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Fallback : si l'ID n'existe pas, retour à l'accueil par sécurité
+      console.warn("Section introuvable: " + sectionId);
+      if (home) home.classList.remove('hidden');
+    }
   }
 
-  function goHome(){
+  // Retour à l'accueil et réinitialisation des vues
+  function goHome() {
+    const home = document.getElementById('homePage');
+    const usine = document.getElementById('usineSection');
+    const uap1 = document.getElementById('uap1Section');
+    const uap2 = document.getElementById('uap2Section');
+    const logistique = document.getElementById('logSection');
 
-    document.getElementById('homePage').classList.remove('hidden');
+    if (home) home.classList.remove('hidden');
+    if (usine) usine.classList.add('hidden');
+    if (uap1) uap1.classList.add('hidden');
+    if (uap2) uap2.classList.add('hidden');
+    if (logistique) logistique.classList.add('hidden');
 
-    document.getElementById('usineSection').classList.add('hidden');
-    document.getElementById('uap1Section').classList.add('hidden');
-    document.getElementById('uap2Section').classList.add('hidden');
-    document.getElementById('logSection').classList.add('hidden');
+    // Scroll pour remonter voir le menu
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // Confirmation au chargement
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("Interface Centre Documentation Technique — Noms des PDF personnalisés (Layout F01/F02, F99 et Valmet, L76/L77, F85/F86, Usine.pdf)");
+  });
 </script>
 
+<!-- Note: conformément aux demandes :
+     - F01 et F02 affichent "Lay out F01 F02.pdf"
+     - L76 et L77 affichent "l76 l77.pdf"
+     - F99 affiche "F99 et Valmet.pdf"
+     - F83 affiche "Lay out F83"
+     - F85 et F86 affichent "F85 F86.pdf"
+     - Usine affiche "Usine.pdf"
+     Tous les liens pointent vers les fichiers originaux (F01.pdf, F02.pdf, F83.pdf, etc.) -->
 </body>
 </html>
