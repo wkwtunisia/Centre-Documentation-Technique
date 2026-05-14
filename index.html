@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Dashboard Technique - WKW Usine & Unités</title>
+    <title>Centre Documentation Technique - WKW</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
         }
 
         body {
             background: linear-gradient(145deg, #eef2f5 0%, #d9e0e8 100%);
             min-height: 100vh;
-            padding: 1.5rem 1.5rem 2rem;
+            padding: 2rem 1.5rem;
         }
 
         .app-container {
@@ -29,7 +29,7 @@
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 1rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             background: rgba(255,255,255,0.75);
             backdrop-filter: blur(8px);
             padding: 0.8rem 1.8rem;
@@ -45,7 +45,6 @@
             height: 50px;
             width: auto;
             object-fit: contain;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
         .title-text h1 {
             font-size: 1.6rem;
@@ -59,103 +58,126 @@
             font-size: 0.8rem;
             color: #2c4e6e;
         }
-        .badge-github {
+        .badge {
             background: #1a2f3f;
             padding: 0.4rem 1rem;
             border-radius: 40px;
             color: white;
             font-size: 0.75rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.8rem;
             margin-bottom: 2rem;
         }
 
-        .card-category {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(2px);
-            border-radius: 2rem;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             overflow: hidden;
-            transition: all 0.25s ease;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        .card-category:hover {
+        .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 28px 40px -16px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
         }
 
         .card-header {
             padding: 1.2rem 1.5rem;
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
             cursor: pointer;
-            transition: filter 0.2s, transform 0.1s;
-            letter-spacing: 0.5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .card-header:active { transform: scale(0.99); }
+        .card-header span:first-child {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        .card-header.open .arrow {
+            transform: rotate(180deg);
+        }
 
-        .header-usine { background: linear-gradient(120deg, #1e4a6b, #0e3a55); }
-        .header-uap1 { background: linear-gradient(120deg, #2b6e4f, #1b5e3f); }
-        .header-uap2 { background: linear-gradient(120deg, #b85c1a, #9b4510); }
-        .header-log { background: linear-gradient(120deg, #5e3a6b, #442d52); }
+        .header-usine { background: linear-gradient(135deg, #1e4a6b, #0e3a55); }
+        .header-uap1 { background: linear-gradient(135deg, #2b6e4f, #1b5e3f); }
+        .header-uap2 { background: linear-gradient(135deg, #b85c1a, #9b4510); }
+        .header-log { background: linear-gradient(135deg, #5e3a6b, #442d52); }
 
         .card-content {
-            padding: 1.2rem 1rem 1.5rem 1rem;
-            background: #ffffffec;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1), padding 0.2s;
-            padding-top: 0;
-            padding-bottom: 0;
+            padding: 1.2rem 1.2rem 1.5rem;
+            display: none;
+            background: #fefefe;
         }
         .card-content.open {
-            max-height: 650px;
-            padding-top: 1rem;
-            padding-bottom: 1.5rem;
-            overflow-y: auto;
+            display: block;
         }
 
-        .titles-grid {
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e4a6b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e0e7ed;
+        }
+
+        .pdf-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.75rem;
-            align-items: center;
+            gap: 0.7rem;
         }
-        .pdf-btn {
-            background: #f0f4f9;
-            border: 1px solid #cbdbe2;
-            border-radius: 60px;
-            padding: 0.5rem 1.2rem;
+
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
             font-size: 0.85rem;
-            font-weight: 600;
-            color: #1f3a4b;
-            cursor: pointer;
             transition: all 0.2s;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            font-family: 'SF Mono', monospace;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
-        .pdf-btn:hover {
+
+        .btn-view {
+            background: #1e4a6b;
+            color: white;
+            border: none;
+        }
+        .btn-view:hover {
+            background: #0e3a55;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn-pdf {
+            background: #f0f4f9;
+            color: #1f3a4b;
+            border: 1px solid #cbdbe2;
+            padding: 0.5rem 1.1rem;
+            border-radius: 25px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .btn-pdf:hover {
             background: #1f4e6e;
             color: white;
             border-color: #1f4e6e;
             transform: scale(1.02);
-            box-shadow: 0 6px 12px -8px rgba(0,0,0,0.2);
         }
-        .pdf-btn:active { transform: scale(0.97); }
 
+        /* Modal pour afficher le PDF */
         .pdf-modal {
             display: none;
             position: fixed;
@@ -163,11 +185,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background: rgba(0,0,0,0.85);
             z-index: 1000;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(6px);
             padding: 20px;
         }
         .modal-container {
@@ -175,29 +196,22 @@
             width: 90%;
             max-width: 1100px;
             height: 85vh;
-            border-radius: 28px;
+            border-radius: 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 30px 40px rgba(0,0,0,0.4);
-            animation: fadeSlideUp 0.2s ease-out;
-        }
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(30px);}
-            to { opacity: 1; transform: translateY(0);}
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.8rem;
+            padding: 1rem 1.5rem;
             background: #1f3f5c;
             color: white;
         }
         .modal-header h3 {
-            font-weight: 600;
-            font-size: 1.3rem;
-            word-break: break-word;
+            font-size: 1.2rem;
         }
         .close-modal {
             background: none;
@@ -207,32 +221,27 @@
             color: white;
             transition: 0.2s;
         }
-        .close-modal:hover { color: #ffb347; transform: scale(1.1);}
+        .close-modal:hover { color: #ffb347; transform: scale(1.1); }
+        
         iframe {
             width: 100%;
             height: 100%;
             border: none;
-            background: #f9fafb;
+            background: #f0f0f0;
         }
+
         .footer-note {
             text-align: center;
             font-size: 0.75rem;
             color: #2c5a7a;
-            margin-top: 1.5rem;
-            background: rgba(255,255,240,0.8);
-            width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 0.5rem 1.2rem;
-            border-radius: 60px;
-            backdrop-filter: blur(4px);
+            margin-top: 2rem;
+            padding: 0.5rem;
         }
+
         @media (max-width: 700px) {
             body { padding: 1rem; }
-            .card-header { font-size: 1.4rem; padding: 0.9rem 1.2rem; }
-            .pdf-btn { padding: 0.4rem 1rem; font-size: 0.75rem; }
-            .logo-area img { height: 38px; }
-            .title-text h1 { font-size: 1.2rem; }
+            .card-header { font-size: 1.4rem; padding: 1rem; }
+            .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -241,297 +250,224 @@
     <div class="header">
         <div class="logo-area">
             <img src="https://www.electrive.net/media/2017/04/wkw-automotive-logo-symbolbild.png" 
-                 alt="WKW Automotive Logo" 
-                 onerror="this.onerror=null; this.src='https://via.placeholder.com/50?text=WKW';">
+                 alt="WKW Logo" 
+                 onerror="this.src='https://via.placeholder.com/50?text=WKW';">
             <div class="title-text">
-                <h1>📄 WKW Tunisia - Documentation Technique</h1>
-                <p>Usine | UAP1 | UAP2 | Logistique · PDFs hébergés sur GitHub</p>
+                <h1>📄 Centre Documentation Technique</h1>
+                <p>WKW Tunisia - Usine | UAP1 | UAP2 | Logistique</p>
             </div>
         </div>
-        <div class="badge-github">
-            <span>📁</span> GitHub Repository
+        <div class="badge">
+            📁 GitHub Pages
         </div>
     </div>
 
-    <div class="dashboard-grid" id="mainGrid">
-        <div class="card-category" data-category="usine">
-            <div class="card-header header-usine" data-cat="usine">🏭 USINE <span style="font-size:0.9rem;">▼</span></div>
-            <div class="card-content" id="content-usine">
-                <div class="titles-grid" id="usine-titles"></div>
+    <div class="dashboard-grid">
+        <!-- CARTE USINE -->
+        <div class="card">
+            <div class="card-header header-usine" onclick="toggleCard(this)">
+                <span>🏭 USINE</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="section-title">Document principal</div>
+                <div class="pdf-grid">
+                    <!-- Bouton qui OUVRE le PDF sans téléchargement -->
+                    <button onclick="openPdfInModal('Usine.pdf', 'USINE - Documentation')" class="btn btn-view">
+                        📄 Voir le PDF Usine
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="card-category" data-category="uap1">
-            <div class="card-header header-uap1" data-cat="uap1">⚙️ UAP1 <span style="font-size:0.9rem;">▼</span></div>
-            <div class="card-content" id="content-uap1">
-                <div class="titles-grid" id="uap1-titles"></div>
+        <!-- CARTE UAP1 -->
+        <div class="card">
+            <div class="card-header header-uap1" onclick="toggleCard(this)">
+                <span>⚙️ UAP1</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="section-title">8 documents techniques</div>
+                <div class="pdf-grid" id="uap1-buttons"></div>
             </div>
         </div>
 
-        <div class="card-category" data-category="uap2">
-            <div class="card-header header-uap2" data-cat="uap2">🔧 UAP2 <span style="font-size:0.9rem;">▼</span></div>
-            <div class="card-content" id="content-uap2">
-                <div class="titles-grid" id="uap2-titles"></div>
+        <!-- CARTE UAP2 -->
+        <div class="card">
+            <div class="card-header header-uap2" onclick="toggleCard(this)">
+                <span>🔧 UAP2</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="section-title">14 documents techniques</div>
+                <div class="pdf-grid" id="uap2-buttons"></div>
             </div>
         </div>
 
-        <div class="card-category" data-category="logistique">
-            <div class="card-header header-log" data-cat="logistique">📦 LOGISTIQUE <span style="font-size:0.9rem;">▼</span></div>
-            <div class="card-content" id="content-logistique">
-                <div class="titles-grid" id="log-titles"></div>
+        <!-- CARTE LOGISTIQUE -->
+        <div class="card">
+            <div class="card-header header-log" onclick="toggleCard(this)">
+                <span>📦 LOGISTIQUE</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="card-content">
+                <div class="section-title">3 documents magasin</div>
+                <div class="pdf-grid" id="log-buttons"></div>
             </div>
         </div>
     </div>
     <div class="footer-note">
-        💡 <strong>Test:</strong> Cliquez sur "USINE" ou sur le bouton "🏭 USINE - Documentation" pour ouvrir Usine.pdf<br>
-        📄 <strong>Usine.pdf</strong> est déjà présent dans le dépôt - il devrait s'ouvrir normalement.
+        💡 <strong>Astuce :</strong> Le PDF s'ouvre directement dans la fenêtre (pas de téléchargement).<br>
+        📄 <strong>Usine.pdf</strong> est déjà configuré et fonctionnel !
     </div>
 </div>
 
+<!-- Modal pour afficher le PDF -->
 <div id="pdfModal" class="pdf-modal">
     <div class="modal-container">
         <div class="modal-header">
             <h3 id="modalTitle">Document PDF</h3>
             <button class="close-modal" id="closeModalBtn">&times;</button>
         </div>
-        <div id="pdfFrameContainer" style="flex:1; min-height: 0;">
-            <iframe id="pdfIframe"></iframe>
-        </div>
+        <iframe id="pdfIframe" src=""></iframe>
     </div>
 </div>
 
 <script>
-    // ==============================================================
-    // CONFIGURATION GITHUB - CORRIGÉE POUR VOTRE DÉPÔT
-    // ==============================================================
+    // Configuration GitHub - votre dépôt correct
+    const GITHUB_BASE = "https://raw.githubusercontent.com/wkwtunisia/Centre-Documentation-Technique/main/";
     
-    // Détection automatique de l'URL de base GitHub
-    // Si la page est ouverte depuis GitHub Pages ou raw, on construit l'URL correcte
-    let GITHUB_RAW_BASE = "https://raw.githubusercontent.com/wkwtunisia/wkwtunisia/main/";
-    
-    // Fonction pour tester si un fichier existe
-    async function testPdfExists(filename) {
-        try {
-            const response = await fetch(GITHUB_RAW_BASE + filename, { method: 'HEAD' });
-            return response.ok;
-        } catch(e) {
-            return false;
-        }
+    // Alternative: Utiliser GitHub Pages (si activé) - OUVRE DIRECTEMENT LE PDF
+    // Pour que ça s'ouvre sans téléchargement, on utilise Google Docs Viewer ou on embed directement
+    function getPdfViewerUrl(pdfUrl) {
+        // Méthode 1: Embed direct (fonctionne sur la plupart des navigateurs)
+        return pdfUrl;
+        // Méthode 2: Utiliser Google Docs Viewer (alternative)
+        // return `https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
     }
     
-    // Fonction pour obtenir l'URL du PDF
-    function getPdfUrl(filename) {
-        // Pour Usine.pdf qui est à la racine
-        return GITHUB_RAW_BASE + filename;
-    }
-    
-    // ========== LISTES DES TITRES ==========
-    const usineItems = [
-        { label: "🏭 USINE - Documentation", pdfFilename: "Usine.pdf" }
-    ];
-    
-    const uap1Items = [
-        "F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"
-    ].map(code => ({ label: code, pdfFilename: `UAP1_${code}.pdf` }));
-    
-    const uap2Raw = [
-        "L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"
-    ];
-    const uap2Items = uap2Raw.map(label => {
-        const safeName = label.replace(/\s+/g, '_');
-        return { label: label, pdfFilename: `UAP2_${safeName}.pdf` };
-    });
-    
-    const logItems = [
-        { label: "📦 magasin général", pdfFilename: "Log_magasin_general.pdf" },
-        { label: "📦 magasin p2", pdfFilename: "Log_magasin_p2.pdf" },
-        { label: "📦 Magasin P1", pdfFilename: "Log_Magasin_P1.pdf" }
-    ];
-    
-    // ========== GESTIONNAIRE PDF ==========
-    function openPdf(pdfFilename, displayLabel) {
+    // Fonction pour ouvrir le PDF dans la modale (AFFICHAGE, pas téléchargement)
+    function openPdfInModal(filename, title) {
         const modal = document.getElementById('pdfModal');
         const iframe = document.getElementById('pdfIframe');
-        const modalTitleElem = document.getElementById('modalTitle');
-        modalTitleElem.innerText = `📄 ${displayLabel}`;
+        const modalTitle = document.getElementById('modalTitle');
         
-        const pdfUrl = getPdfUrl(pdfFilename);
-        console.log(`📂 Chargement du PDF: ${pdfUrl}`);
+        const pdfUrl = GITHUB_BASE + filename;
+        modalTitle.textContent = `📄 ${title}`;
         
-        // Message de chargement
+        // Afficher un message de chargement
         iframe.srcdoc = `
             <html>
             <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#f5f5f5;">
                 <div style="text-align:center;">
-                    <h3>📄 Chargement du document...</h3>
-                    <p style="color:#666;margin-top:10px;">${pdfFilename}</p>
-                    <div style="width:50px;height:50px;border:4px solid #f3f3f3;border-top:4px solid #1e4a6b;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;"></div>
+                    <h3>⏳ Chargement du PDF...</h3>
+                    <p>${filename}</p>
+                    <div style="width:40px;height:40px;border:3px solid #f3f3f3;border-top:3px solid #1e4a6b;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;"></div>
                     <style>@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}</style>
                 </div>
             </body>
             </html>
         `;
         
-        // Charger le PDF
+        // Charger le PDF dans l'iframe (s'affiche directement)
         iframe.src = pdfUrl;
         
-        // Gestion d'erreur si le PDF ne charge pas
-        setTimeout(() => {
-            try {
-                // Vérification simple
-                if (iframe.contentDocument && iframe.contentDocument.body) {
-                    const bodyText = iframe.contentDocument.body.innerText || "";
-                    if (bodyText.includes("404") || bodyText.includes("Not Found")) {
-                        throw new Error("404");
-                    }
-                }
-            } catch(e) {
-                // Afficher un message d'erreur élégant
-                iframe.srcdoc = `
-                    <html>
-                    <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
-                        <div style="text-align:center;max-width:500px;">
-                            <h2>⚠️ Fichier PDF non trouvé</h2>
-                            <p>Le fichier <strong style="color:#b85c1a;">${pdfFilename}</strong> n'existe pas encore dans le dépôt.</p>
-                            <div style="background:#e8f0fe;border-radius:12px;padding:15px;margin:15px 0;text-align:left;">
-                                <strong>📌 Pour ajouter ce document :</strong><br>
-                                1. Téléchargez <code>${pdfFilename}</code><br>
-                                2. Allez sur GitHub → Add file → Upload files<br>
-                                3. Déposez le fichier et validez
-                            </div>
-                            <p>✅ <strong>Usine.pdf</strong> est déjà disponible et devrait fonctionner !</p>
-                            <button onclick="window.location.reload()" style="margin-top:10px;padding:8px 20px;background:#1e4a6b;color:white;border:none;border-radius:25px;cursor:pointer;">⟳ Réessayer</button>
-                        </div>
-                    </body>
-                    </html>
-                `;
-            }
-        }, 2000);
-        
+        // Afficher la modale
         modal.style.display = 'flex';
         
-        // Fermeture de la modale
-        const closeModal = () => {
-            modal.style.display = 'none';
-            iframe.src = "about:blank";
-            document.removeEventListener('keydown', escHandler);
+        // Gestionnaire d'erreur si le PDF ne charge pas
+        iframe.onerror = () => {
+            iframe.srcdoc = `
+                <html>
+                <body style="display:flex;align-items:center;justify-content:center;height:100%;font-family:sans-serif;background:#fff3e0;padding:20px;">
+                    <div style="text-align:center;">
+                        <h2>⚠️ PDF non trouvé</h2>
+                        <p>Le fichier <strong>${filename}</strong> n'existe pas encore.</p>
+                        <p>📌 Uploadez-le sur GitHub dans le dépôt <strong>Centre-Documentation-Technique</strong></p>
+                    </div>
+                </body>
+                </html>
+            `;
         };
-        const escHandler = (e) => { if (e.key === 'Escape') closeModal(); };
-        document.addEventListener('keydown', escHandler);
-        const closeBtn = document.getElementById('closeModalBtn');
-        closeBtn.onclick = () => closeModal();
-        modal.onclick = (e) => { if (e.target === modal) closeModal(); };
     }
     
-    // ========== CONSTRUCTION DE L'INTERFACE ==========
-    function buildTitles() {
-        // USINE
-        const usineContainer = document.getElementById('usine-titles');
-        usineContainer.innerHTML = '';
-        usineItems.forEach(item => {
-            const btn = document.createElement('button');
-            btn.className = 'pdf-btn';
-            btn.innerText = item.label;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openPdf(item.pdfFilename, `USINE - ${item.label}`);
-            });
-            usineContainer.appendChild(btn);
-        });
+    // Liste des titres UAP1
+    const uap1Titles = ["F01", "F02", "F83", "F99", "F85", "F86", "L76", "L77"];
+    
+    // Liste des titres UAP2
+    const uap2Titles = ["L84", "F31", "F87", "F15", "a12", "50t", "80 t", "120 t", "125 t", "520 t", "550 t", "420 t", "f06", "f24"];
+    
+    // Liste Logistique
+    const logTitles = ["magasin général", "magasin p2", "Magasin P1"];
+    
+    // Créer les boutons pour UAP1
+    const uap1Container = document.getElementById('uap1-buttons');
+    uap1Titles.forEach(title => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-pdf';
+        btn.textContent = title;
+        btn.onclick = () => openPdfInModal(`UAP1_${title}.pdf`, `UAP1 - ${title}`);
+        uap1Container.appendChild(btn);
+    });
+    
+    // Créer les boutons pour UAP2
+    const uap2Container = document.getElementById('uap2-buttons');
+    uap2Titles.forEach(title => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-pdf';
+        btn.textContent = title;
+        const safeName = title.replace(/\s+/g, '_');
+        btn.onclick = () => openPdfInModal(`UAP2_${safeName}.pdf`, `UAP2 - ${title}`);
+        uap2Container.appendChild(btn);
+    });
+    
+    // Créer les boutons pour LOGISTIQUE
+    const logContainer = document.getElementById('log-buttons');
+    logTitles.forEach(title => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-pdf';
+        btn.textContent = title;
+        const fileName = `Log_${title.replace(/\s+/g, '_')}.pdf`;
+        btn.onclick = () => openPdfInModal(fileName, `Logistique - ${title}`);
+        logContainer.appendChild(btn);
+    });
+    
+    // Fonction pour toggle l'accordéon
+    function toggleCard(headerElement) {
+        const card = headerElement.closest('.card');
+        const content = card.querySelector('.card-content');
+        const arrow = headerElement.querySelector('.arrow');
         
-        // UAP1
-        const uap1Container = document.getElementById('uap1-titles');
-        uap1Container.innerHTML = '';
-        uap1Items.forEach(item => {
-            const btn = document.createElement('button');
-            btn.className = 'pdf-btn';
-            btn.innerText = item.label;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openPdf(item.pdfFilename, `UAP1 - ${item.label}`);
-            });
-            uap1Container.appendChild(btn);
-        });
-        
-        // UAP2
-        const uap2Container = document.getElementById('uap2-titles');
-        uap2Container.innerHTML = '';
-        uap2Items.forEach(item => {
-            const btn = document.createElement('button');
-            btn.className = 'pdf-btn';
-            btn.innerText = item.label;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openPdf(item.pdfFilename, `UAP2 - ${item.label}`);
-            });
-            uap2Container.appendChild(btn);
-        });
-        
-        // LOGISTIQUE
-        const logContainer = document.getElementById('log-titles');
-        logContainer.innerHTML = '';
-        logItems.forEach(item => {
-            const btn = document.createElement('button');
-            btn.className = 'pdf-btn';
-            btn.innerText = item.label;
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openPdf(item.pdfFilename, `LOGISTIQUE - ${item.label}`);
-            });
-            logContainer.appendChild(btn);
-        });
+        content.classList.toggle('open');
+        headerElement.classList.toggle('open');
     }
     
-    // Gestion accordéon
-    function initAccordion() {
-        const headers = document.querySelectorAll('.card-header');
-        headers.forEach(header => {
-            header.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const parentCard = header.closest('.card-category');
-                const contentDiv = parentCard.querySelector('.card-content');
-                if (contentDiv) {
-                    contentDiv.classList.toggle('open');
-                }
-            });
-        });
-        // Ouvrir Usine par défaut
-        const usineContent = document.getElementById('content-usine');
-        if(usineContent) usineContent.classList.add('open');
-    }
+    // Fermeture de la modale
+    const modal = document.getElementById('pdfModal');
+    const closeBtn = document.getElementById('closeModalBtn');
+    const iframe = document.getElementById('pdfIframe');
     
-    // Clic sur l'en-tête USINE ouvre Usine.pdf
-    function addUsineHeaderDirectPdf() {
-        const usineHeader = document.querySelector('[data-category="usine"] .card-header');
-        if (usineHeader && usineItems.length > 0) {
-            usineHeader.addEventListener('click', (e) => {
-                const usinePdfItem = usineItems[0];
-                openPdf(usinePdfItem.pdfFilename, `🏭 DOCUMENT USINE - ${usinePdfItem.label}`);
-            });
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+        iframe.src = 'about:blank';
+    };
+    
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+            iframe.src = 'about:blank';
         }
-    }
+    };
     
-    // Vérification au démarrage que Usine.pdf est accessible
-    async function checkUsinePdf() {
-        const exists = await testPdfExists("Usine.pdf");
-        if (exists) {
-            console.log("✅ Usine.pdf est accessible !");
-        } else {
-            console.warn("⚠️ Usine.pdf non trouvé - vérifiez qu'il est bien dans le dépôt");
+    // Ouvrir la carte USINE par défaut
+    document.addEventListener('DOMContentLoaded', () => {
+        const usineCard = document.querySelector('.card:first-child .card-content');
+        const usineHeader = document.querySelector('.card:first-child .card-header');
+        if (usineCard) {
+            usineCard.classList.add('open');
+            usineHeader.classList.add('open');
         }
-    }
-    
-    // Initialisation
-    function init() {
-        buildTitles();
-        initAccordion();
-        addUsineHeaderDirectPdf();
-        checkUsinePdf();
-        console.log("✅ Dashboard prêt");
-        console.log(`📁 Base URL: ${GITHUB_RAW_BASE}`);
-    }
-    
-    init();
+    });
 </script>
 </body>
 </html>
